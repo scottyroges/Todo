@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+zappa = "*"
+flask = "*"
+flask-sqlalchemy = "*"
+sqlalchemy = "*"
+mysqlclient = "*"
+arrow = "*"
+marshmallow-sqlalchemy = "*"
+marshmallow-enum = "*"
+python-jose = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.6"
