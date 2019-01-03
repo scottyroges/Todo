@@ -2,7 +2,7 @@ class AppError(Exception):
     status_code = 400
     prefix = "Error"
 
-    def __init__(self, message, status_code=None, payload=None):
+    def __init__(self, message="", status_code=None, payload=None):
         Exception.__init__(self)
         self.message = message
         if status_code is not None:

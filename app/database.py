@@ -1,4 +1,4 @@
-from app.utils.config import config
+from app.config import config
 
 
 def configure_database(app):

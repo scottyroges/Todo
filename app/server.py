@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, jsonify
 from app.controller import register_controllers
 from app.database import configure_database

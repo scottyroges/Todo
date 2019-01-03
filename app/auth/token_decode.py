@@ -1,8 +1,8 @@
-import datetime
+from datetime import datetime
 import json
 from jose import jwt, jws
 import logging
-from app.utils.config import config
+from app.config import config, file_project_path
 
 log = logging.getLogger(__name__)
 
@@ -13,7 +13,7 @@ cognito_region = config.get("cognitoRegion")
 cognito_userpool_id = config.get("cognitoUserPoolId")
 userpool_keys_file = config.get("cognitoUserPoolKeysFile")
 userpool_keys = []
-with open(userpool_keys_file) as f:
+with open(file_project_path(userpool_keys_file)) as f:
     userpool_keys = json.load(f).get("keys")
 
 
@@ -21,17 +21,15 @@ def authorize_request(request):
     try:
         token = _retrieve_header_token(request)
 
-        username = _get_username_from_token(token)
-        if username is None:
-            raise Exception("Username not found in token")
+        _get_username_from_token(token)
 
         userpool_iss = _cognito_userpool_iss(cognito_region, cognito_userpool_id)
 
         return _validate_jwt(token, userpool_iss, userpool_keys)
-    except InvalidToken as e:
+    except InvalidTokenError as e:
         raise e
     except Exception as e:
-        raise InvalidToken(e)
+        raise InvalidTokenError(e)
 
 
 def _retrieve_header_token(request):
@@ -39,7 +37,7 @@ def _retrieve_header_token(request):
     """
     token = request.headers.get("Authorization", None)
     if not token:
-        raise Exception("No token found in header")
+        raise NoTokenError
     if token.startswith(BEARER_PREFIX):
         token = token[len(BEARER_PREFIX):]
     return token
@@ -71,41 +69,41 @@ def _validate_jwt(token, userpool_iss, userpool_keys):
     kid = jwt_headers["kid"]
     use_keys = [key for key in userpool_keys if key["kid"] == kid]
     if len(use_keys) != 1:
-        raise InvalidToken("Obtained keys are wrong")
+        raise InvalidTokenError("Obtained keys are wrong")
     use_key = use_keys[0]
     try:
         jwt.decode(token, use_key)
     except Exception as e:
-        raise InvalidToken("Failed to decode token: {}".format(e))
+        raise InvalidTokenError("Failed to decode token: {}".format(e))
 
     # 3 Check iss claim
     claims = jwt.get_unverified_claims(token)
     if claims["iss"] != userpool_iss:
-        raise InvalidToken("Invalid issuer in token")
+        raise InvalidTokenError("Invalid issuer in token")
 
     # 4 Check token use
     # Should we only allow one of the tokens or both "id" and "access"?
     if claims["token_use"] not in ["id", "access"]:
-        raise InvalidToken("Token not of valid use")
+        raise InvalidTokenError("Token not of valid use")
 
     # 5 Check kid
     jwk_kids = [obj["kid"] for obj in userpool_keys]
     if kid not in jwk_kids:
         # Should be here; condition 2 should have guaranteed this
-        raise InvalidToken("Token is not related to id provider")
+        raise InvalidTokenError("Token is not related to id provider")
 
     # 6 Verify signature of decoded JWT?
     try:
         jws.verify(token, use_key, jwt_headers["alg"])
     except Exception as e:
-        raise InvalidToken("Failed to verify signature {}".format(e))
+        raise InvalidTokenError("Failed to verify signature {}".format(e))
 
     # 7 Check exp and make sure it is not expired
     exp = claims["exp"]
-    exp_date = datetime.datetime.utcfromtimestamp(exp)
-    now = datetime.datetime.utcnow()
+    exp_date = datetime.utcfromtimestamp(exp)
+    now = datetime.utcnow()
     if exp_date < now:
-        raise InvalidToken("Token has expired {}".format(exp_date - now))
+        raise InvalidTokenError("Token has expired {}".format(exp_date - now))
 
     return claims
 
@@ -133,12 +131,19 @@ def _get_username_from_token(token):
 
     use = claims["token_use"]
     if use == "id":
-        return claims["cognito:username"]
+        username = claims["cognito:username"]
     if use == "access":
-        return claims["username"]
-    return None
+        username = claims["username"]
+
+    if username is None:
+        raise InvalidTokenError("Username not found in token")
 
 
-class InvalidToken(BaseException):
-    def __init__(self, message):
+class NoTokenError(BaseException):
+    def __init__(self):
+        self.message = "No token found in header"
+
+
+class InvalidTokenError(BaseException):
+    def __init__(self, message=""):
         self.message = "Token validation failed: {}".format(message)

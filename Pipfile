@@ -13,6 +13,8 @@ arrow = "*"
 marshmallow-sqlalchemy = "*"
 marshmallow-enum = "*"
 python-jose = "*"
+pytest = "*"
+pytest-mock = "*"
 
 [dev-packages]
 

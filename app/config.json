@@ -1,6 +1,6 @@
 {
   "cognitoRegion": "us-east-2",
   "cognitoUserPoolId": "us-east-2_GgKNcQC1D",
-  "cognitoUserPoolKeysFile": "app/jwks.json",
+  "cognitoUserPoolKeysFile": "jwks.json",
   "databaseURI": "mysql://admin:D13hARd9VU0@vader.cxx2ji8xwmsz.us-east-2.rds.amazonaws.com:3306/app"
 }
