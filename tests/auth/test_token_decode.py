@@ -242,7 +242,7 @@ def test_authorize_request_decode_error(userpool_keys,
                                         claims_identity,
                                         unexpired_token,
                                         mocker):
-    mock_decode = mocker.patch("jose.jwt.decode")
+    mocker.patch("jose.jwt.decode")
     mock_verify = mocker.patch("jose.jws.verify")
     mock_verify.side_effect = Exception
 
