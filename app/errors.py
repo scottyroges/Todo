@@ -1,8 +1,7 @@
 class AppError(Exception):
     status_code = 400
-    prefix = "Error"
 
-    def __init__(self, message="", status_code=None, payload=None):
+    def __init__(self, message=None, status_code=None, payload=None):
         Exception.__init__(self)
         self.message = message
         if status_code is not None:
@@ -10,17 +9,18 @@ class AppError(Exception):
         self.payload = payload
 
     def to_dict(self):
-        rv = dict(self.payload or ())
-        rv['statusCode'] = self.status_code
-        rv['message'] = "%s: %s" % (self.prefix, self.message)
-        return rv
+        response = dict(self.payload or ())
+        response['statusCode'] = self.status_code
+        if self.message is not None:
+            response['message'] = "%s: %s" % (self.__class__.__name__, self.message)
+        else:
+            response['message'] = "%s: %s" % ("Error", self.__class__.__name__)
+        return response
 
 
 class UnauthorizedError(AppError):
     status_code = 401
-    prefix = "Unauthorized Request"
 
 
 class MarshallingError(AppError):
-    status_code = 400
-    prefix = "Marshalling Error"
+    pass
