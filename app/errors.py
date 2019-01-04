@@ -24,3 +24,7 @@ class UnauthorizedError(AppError):
 
 class MarshallingError(AppError):
     pass
+
+
+class NotFoundError(AppError):
+    status_code = 404

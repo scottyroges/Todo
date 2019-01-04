@@ -1,5 +1,3 @@
-import os
-
 from flask import Flask, jsonify
 from app.controller import register_controllers
 from app.database import configure_database
@@ -24,4 +22,5 @@ def handle_invalid_usage(error):
 
 # include this for local dev
 if __name__ == '__main__':
+    print("called from main")
     app.run(debug=True)

@@ -29,7 +29,10 @@ def authorize_request(request):
     except InvalidTokenError as e:
         raise e
     except Exception as e:
-        raise InvalidTokenError(e)
+        if hasattr(e, "message"):
+            raise InvalidTokenError(e.message)
+        else:
+            raise InvalidTokenError(e.__class__.__name__)
 
 
 def _retrieve_header_token(request):
@@ -139,11 +142,11 @@ def _get_username_from_token(token):
         raise InvalidTokenError("Username not found in token")
 
 
-class NoTokenError(BaseException):
+class NoTokenError(Exception):
     def __init__(self):
         self.message = "No token found in header"
 
 
-class InvalidTokenError(BaseException):
+class InvalidTokenError(Exception):
     def __init__(self, message=""):
         self.message = "Token validation failed: {}".format(message)

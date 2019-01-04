@@ -1,4 +1,4 @@
-from app.errors import AppError, UnauthorizedError, MarshallingError
+from app.errors import AppError, UnauthorizedError, MarshallingError, NotFoundError
 
 
 def test_app_error():
@@ -67,4 +67,12 @@ def test_marshalling_error():
     assert error.to_dict() == {
         "statusCode": 400,
         "message": "Error: MarshallingError"
+    }
+
+
+def test_not_found_error():
+    error = NotFoundError()
+    assert error.to_dict() == {
+        "statusCode": 404,
+        "message": "Error: NotFoundError"
     }

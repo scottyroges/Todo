@@ -6,6 +6,7 @@ def file_project_path(filename):
     # its important that this lives in the root of the project
     # would be great to find a better way to do this,
     # but for now this works
+    # could potentially use flasks built in config
     return os.path.dirname(os.path.abspath(__file__)) + "/" + filename
 
 
