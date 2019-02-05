@@ -9,6 +9,6 @@ def test_habit_create(client, session, mocker):
                               headers={'Authorization': 'fake_token'})
     create_data = json.loads(create_resp.data.decode('utf-8'))
     fetch_resp = client.get('/habit/%s' % create_data["id"],
-                             headers={'Authorization': 'fake_token'})
+                            headers={'Authorization': 'fake_token'})
     fetch_data = json.loads(fetch_resp.data.decode('utf-8'))
     print(fetch_data)

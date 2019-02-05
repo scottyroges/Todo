@@ -8,8 +8,8 @@ app = Flask(__name__)
 
 db = configure_database(app)
 
-load_models()
-load_schemas(db)
+# load_models()
+# load_schemas(db)
 register_controllers(app)
 
 
