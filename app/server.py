@@ -2,15 +2,18 @@ from flask import Flask, jsonify
 from app.controller import register_controllers
 from app.database import configure_database
 from app.errors import AppError
-from app.model import load_models, load_schemas
+from app.model import load_models
 
 app = Flask(__name__)
 
 db = configure_database(app)
 
-# load_models()
-# load_schemas(db)
+load_models()
 register_controllers(app)
+
+# import logging
+# logging.basicConfig()
+# logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 
 @app.errorhandler(AppError)

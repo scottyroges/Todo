@@ -1,13 +1,13 @@
-from app.todo.domains.habit import Habit
-from app.todo.domains.habit_buffer import HabitBuffer, HabitBufferType
-from app.todo.domains.habit_period import HabitPeriod, HabitPeriodType
+from app.todo.domains.habit.habit import Habit
+from app.todo.domains.habit.habit_buffer import HabitBuffer, HabitBufferType
+from app.todo.domains.habit.habit_period import HabitPeriod, HabitPeriodType
 from app.todo.domains.todo_type import TodoType
 
 
 class TodoFactory:
     @classmethod
     def create_todo(cls, todo_data, todo_type):
-        if todo_type == TodoType.HABIT.value:
+        if TodoType[todo_type] == TodoType.HABIT:
             return cls.create_habit(todo_data)
         else:
             print("wtf")
@@ -25,8 +25,8 @@ class TodoFactory:
 
         return Habit(name=habit_data.get('name'),
                      description=habit_data.get('description'),
+                     points_per=habit_data.get('pointsPer'),
                      completion_points=habit_data.get('completionPoints'),
                      frequency=habit_data.get('frequency'),
                      period=period,
-                     buffer=buffer,
-                     points_per=habit_data.get('points_per'))
+                     buffer=buffer)
