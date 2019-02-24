@@ -7,7 +7,7 @@ from app.todo.domains.todo_type import TodoType
 class TodoFactory:
     @classmethod
     def create_todo(cls, todo_data, todo_type):
-        if TodoType[todo_type] == TodoType.HABIT:
+        if todo_type == TodoType.HABIT:
             return cls.create_habit(todo_data)
         else:
             print("wtf")

@@ -9,5 +9,9 @@ def configure_database(app):
     db = SQLAlchemy(app, session_options=dict(expire_on_commit=False,
                                               autoflush=False,
                                               weak_identity_map=False))
-
     return db
+
+
+def load_models():
+    # hiding this a little bit
+    from app import model

@@ -5,6 +5,7 @@ from flask import request, Blueprint
 from app.auth.auth_decorator import authorized
 from app.todo.commands.add_todo import AddTodo
 from app.todo.commands.get_todo import GetTodo
+from app.todo.domains.todo_type import TodoType
 
 habit_controller = Blueprint('habit', __name__)
 
@@ -17,7 +18,7 @@ def create():
     if not habit_data.get("todo_owner_id"):
         habit_data["todo_owner_id"] = request.user_id
 
-    habit = AddTodo().execute(habit_data, "HABIT")
+    habit = AddTodo().execute(habit_data, TodoType.HABIT)
     return jsonify(habit.to_dict())
 
 

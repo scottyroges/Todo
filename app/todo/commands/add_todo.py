@@ -1,6 +1,6 @@
 from app.auth.auth_util import is_owner_or_admin
 from app.errors import UnauthorizedError
-from app.todo.adpaters.sqlalchemy.todo_repository_factory import TodoRepositoryFactory
+from app.todo.todo_repository_factory import TodoRepositoryFactory
 from app.todo.domains.category import Category
 from app.todo.domains.tag import Tag
 from app.todo.domains.todo_owner import TodoOwner

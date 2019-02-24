@@ -1,21 +1,20 @@
 from flask import Flask, jsonify
 from app.controller import register_controllers
-from app.database import configure_database
+from app.database import configure_database, load_models
 from app.errors import AppError
-from app.model import load_models
 
+# Create flask app
 app = Flask(__name__)
 
+# Setup DB
 db = configure_database(app)
-
 load_models()
+
+# Setup routes
 register_controllers(app)
 
-# import logging
-# logging.basicConfig()
-# logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
-
+# Error handler
 @app.errorhandler(AppError)
 def handle_invalid_usage(error):
     response = jsonify(error.to_dict())

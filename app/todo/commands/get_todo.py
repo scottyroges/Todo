@@ -1,11 +1,11 @@
 from app.auth.auth_util import is_owner_or_admin
 from app.errors import NotFoundError, UnauthorizedError
-from app.todo.adpaters.sqlalchemy.todo_repository import TodoRepository
+from app.todo.todo_repository_factory import TodoRepositoryFactory
 
 
 class GetTodo:
     def execute(self, todo_id):
-        repo = TodoRepository()
+        repo = TodoRepositoryFactory.create()
         todo = repo.read(todo_id)
 
         if not todo:

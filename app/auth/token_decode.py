@@ -26,7 +26,7 @@ def authorize_request(request):
         userpool_iss = _cognito_userpool_iss(cognito_region, cognito_userpool_id)
 
         return _validate_jwt(token, userpool_iss, userpool_keys)
-    except InvalidTokenError as e:
+    except (InvalidTokenError, NoTokenError) as e:
         raise e
     except Exception as e:
         if hasattr(e, "message"):

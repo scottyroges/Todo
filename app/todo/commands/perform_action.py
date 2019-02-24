@@ -1,13 +1,18 @@
+import datetime
+
 from app.todo.adpaters.sqlalchemy.todo_repository import TodoRepository
-from app.todo.adpaters.sqlalchemy.todo_repository_factory import TodoRepositoryFactory
+from app.todo.commands.get_todo import GetTodo
 from app.todo.domains.action import Action
 
 
 class PerformAction:
     def execute(self, action_data):
-        repo = TodoRepository()
-        todo = repo.read(action_data.get("todoId"))
-        action = Action(action_date=action_data.get("actionDate"),
+        todo = GetTodo().execute(action_data.get("todoId"))
+        action_date = None
+        if action_data.get("actionDate"):
+            action_date = datetime.datetime.strptime(action_data.get("actionDate"),
+                                                     '%Y-%m-%d %H:%M:%S')
+        action = Action(action_date=action_date,
                         points=action_data.get("points"))
         todo.perform_action(action)
-        return repo.update(todo)
+        return TodoRepository().update(todo)

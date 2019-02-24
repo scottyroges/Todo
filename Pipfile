@@ -15,6 +15,7 @@ marshmallow-enum = "*"
 python-jose = "*"
 pytest = "*"
 pytest-mock = "*"
+freezegun = "*"
 
 [dev-packages]
 

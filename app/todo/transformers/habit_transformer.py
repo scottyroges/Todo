@@ -1,7 +1,9 @@
-from app.model.action import Action
-from app.model.category import Category
-from app.model.habit import Habit
-from app.model.tag import Tag
+from app.model import (
+    Action,
+    Category,
+    Habit,
+    Tag
+)
 from app.todo.domains.action import Action as DomainAction
 from app.todo.domains.habit.habit import Habit as DomainHabit
 from app.todo.domains.category import Category as DomainCategory

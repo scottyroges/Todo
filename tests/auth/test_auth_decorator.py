@@ -1,7 +1,7 @@
 import pytest
 
 from app.auth.auth_decorator import authorized
-from app.auth.token_decode import InvalidToken
+from app.auth.token_decode import InvalidTokenError
 from app.errors import UnauthorizedError
 
 
@@ -40,7 +40,7 @@ def test_authorized_wrapper_valid_admin(pre_auth_request, mocker):
 
 def test_authorized_wrapper_invalid(mocker):
     mock_ar = mocker.patch("app.auth.auth_decorator.authorize_request")
-    mock_ar.side_effect = InvalidToken
+    mock_ar.side_effect = InvalidTokenError
 
     @authorized
     def func():

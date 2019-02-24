@@ -12,23 +12,23 @@ class Todo:
                  name=None,
                  description=None,
                  todo_type=None,
-                 completion_points=0,
-                 categories=[],
-                 tags=[],
-                 actions=[],
-                 created_date=datetime.now(),
-                 modified_date=datetime.now()):
+                 completion_points=None,
+                 categories=None,
+                 tags=None,
+                 actions=None,
+                 created_date=None,
+                 modified_date=None):
         self.todo_id = todo_id or uuid.uuid4()
         self.todo_owner = todo_owner
         self.name = name
         self.description = description
         self.todo_type = todo_type
-        self.completion_points = completion_points
-        self.categories = categories
-        self.tags = tags
-        self.actions = actions
-        self.created_date = created_date
-        self.modified_date = modified_date
+        self.completion_points = completion_points or 0
+        self.categories = categories or []
+        self.tags = tags or []
+        self.actions = actions or []
+        self.created_date = created_date or datetime.now()
+        self.modified_date = modified_date or datetime.now()
 
     def add_category(self, category: Category):
         self.categories.append(category)
