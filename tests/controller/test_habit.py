@@ -3,7 +3,7 @@ import json
 import pytest
 
 
-@pytest.mark.skip(reason="no way of currently testing this")
+@pytest.mark.integration
 def test_habit_create(client, session, mocker):
     mocker.patch("app.auth.auth_decorator.authorize_request",
                  return_value={"sub": "123"})
