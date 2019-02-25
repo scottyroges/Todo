@@ -6,7 +6,7 @@ STASH_NAME="pre-commit-$(date +%s)"
 git stash save -q --keep-index $STASH_NAME
 
 # Test prospective commit
-./run_tests.sh
+./run_unit_tests.sh
 RESULT=$?
 
 
@@ -14,6 +14,7 @@ STASHES=$(git stash list)
 if [[ $STASHES == "$STASH_NAME" ]]; then
   git stash pop -q
 fi
+
 echo "pre-commit complete"
 [ $RESULT -ne 0 ] && exit 1
 exit 0
