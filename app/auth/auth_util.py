@@ -1,4 +1,4 @@
-from app.auth.get_request import get_request
+from app.auth import get_request
 
 
 def is_owner_or_admin(object_owner_id):

@@ -1,5 +1,5 @@
 from functools import wraps
-from app.auth.get_request import get_request
+from app.auth import get_request
 from app.auth.token_decode import authorize_request, InvalidTokenError
 from app.errors import UnauthorizedError
 
