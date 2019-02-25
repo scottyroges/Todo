@@ -14,6 +14,6 @@ STASHES=$(git stash list)
 if [[ $STASHES == "$STASH_NAME" ]]; then
   git stash pop -q
 fi
-echo "pre-commit end"
+echo "pre-commit complete"
 [ $RESULT -ne 0 ] && exit 1
 exit 0
