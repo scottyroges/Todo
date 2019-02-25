@@ -1,8 +1,6 @@
 import datetime
-
 from freezegun import freeze_time
 
-import tests.fake_models
 from app.todo.commands.perform_action import PerformAction
 from app.todo.domains.category import Category
 from app.todo.domains.habit.habit import Habit

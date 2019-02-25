@@ -1,4 +1,4 @@
-from app.server import db
+from app.database import db
 
 todo_category_xref = \
     db.Table('todo_category_xref',

@@ -1,5 +1,3 @@
-import tests.fake_models
-
 import pytest
 from freezegun import freeze_time
 

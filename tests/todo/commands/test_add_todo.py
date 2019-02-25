@@ -1,5 +1,3 @@
-import tests.fake_models
-
 import datetime
 import pytest
 from freezegun import freeze_time
@@ -13,6 +11,7 @@ from app.todo.commands.add_todo import AddTodo
 
 @freeze_time("2019-02-24")
 def test_add_todo_habit(user_request, todo_repo):
+
     todo_data = {
         "name": "habit",
         "todo_owner_id": user_request.user_id,

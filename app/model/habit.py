@@ -1,5 +1,5 @@
 from app.model.todo import Todo
-from app.server import db
+from app.database import db
 from app.todo.domains.todo_type import TodoType
 
 

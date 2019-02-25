@@ -1,5 +1,5 @@
 from app.model import Todo
-from app.server import db
+from app.database import db
 from app.todo.domains.todo_type import TodoType
 from app.todo.transformers.habit_transformer import HabitTransformer
 

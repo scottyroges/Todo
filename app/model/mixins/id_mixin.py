@@ -1,5 +1,5 @@
 import uuid
-from app.server import db
+from app.database import db
 
 
 class IdMixin(object):

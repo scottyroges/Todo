@@ -1,6 +1,4 @@
-from arrow import Arrow
-
-from app.server import db
+from app.database import db
 
 
 class TimeMixin(object):

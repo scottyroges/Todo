@@ -1,5 +1,5 @@
 from app.model.mixins.id_mixin import IdMixin
-from app.server import db
+from app.database import db
 
 
 class Action(db.Model, IdMixin):

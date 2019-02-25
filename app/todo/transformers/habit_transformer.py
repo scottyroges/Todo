@@ -1,8 +1,8 @@
 from app.model import (
-    Action,
-    Category,
-    Habit,
-    Tag
+    Action as ActionRecord,
+    Category as CategoryRecord,
+    Habit as HabitRecord,
+    Tag as TagRecord
 )
 from app.todo.domains.action import Action as DomainAction
 from app.todo.domains.habit.habit import Habit as DomainHabit
@@ -27,37 +27,37 @@ class HabitTransformer:
             "amount": habit.buffer.amount
         }
 
-        categories = [Category(id=category.category_id,
-                               name=category.name)
+        categories = [CategoryRecord(id=category.category_id,
+                                     name=category.name)
                       for category in habit.categories]
 
-        tags = [Tag(id=tag.tag_id,
-                    name=tag.name)
+        tags = [TagRecord(id=tag.tag_id,
+                          name=tag.name)
                 for tag in habit.tags]
 
-        actions = [Action(id=action.action_id,
-                          action_date=action.action_date,
-                          points=action.points)
+        actions = [ActionRecord(id=action.action_id,
+                                action_date=action.action_date,
+                                points=action.points)
                    for action in habit.actions]
 
-        return Habit(todo_id=habit.todo_id,
-                     todo_owner_id=habit.todo_owner.owner_id,
-                     name=habit.name,
-                     description=habit.description,
-                     todo_type=habit.todo_type,
-                     points_per=habit.points_per,
-                     completion_points=habit.completion_points,
-                     frequency=habit.frequency,
-                     period=period,
-                     buffer=buffer,
-                     categories=categories,
-                     tags=tags,
-                     actions=actions,
-                     created_date=habit.created_date,
-                     modified_date=habit.modified_date)
+        return HabitRecord(todo_id=habit.todo_id,
+                           todo_owner_id=habit.todo_owner.owner_id,
+                           name=habit.name,
+                           description=habit.description,
+                           todo_type=habit.todo_type,
+                           points_per=habit.points_per,
+                           completion_points=habit.completion_points,
+                           frequency=habit.frequency,
+                           period=period,
+                           buffer=buffer,
+                           categories=categories,
+                           tags=tags,
+                           actions=actions,
+                           created_date=habit.created_date,
+                           modified_date=habit.modified_date)
 
     @classmethod
-    def from_record(cls, habit_record: Habit):
+    def from_record(cls, habit_record: HabitRecord):
         todo_owner = TodoOwner(owner_id=habit_record.todo_owner_id)
         period = HabitPeriod(period_type=HabitPeriodType[habit_record.period.get("periodType")],
                              amount=habit_record.period.get("amount"),

@@ -1,5 +1,5 @@
 from app.model.mixins.time_mixin import TimeMixin
-from app.server import db
+from app.database import db
 from app.todo.domains.todo_type import TodoType
 
 
