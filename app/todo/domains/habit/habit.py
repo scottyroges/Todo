@@ -55,7 +55,7 @@ class Habit(Todo):
             },
             "categories": [category.name for category in self.categories],
             "tags": [tag.name for tag in self.tags],
-            "created_date": self.created_date,
-            "modified_date": self.modified_date,
+            "createdDate": self.created_date,
+            "modifiedDate": self.modified_date,
             "actions": [action.to_dict() for action in self.actions]
         }

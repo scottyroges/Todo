@@ -55,8 +55,8 @@ def test_to_dict():
             },
             "categories": ["test", "again"],
             "tags": ["who", "knows"],
-            "created_date": datetime.datetime(2019, 2, 24, 10, 0, 4),
-            "modified_date": datetime.datetime(2019, 2, 24, 10, 0, 4),
+            "createdDate": datetime.datetime(2019, 2, 24, 10, 0, 4),
+            "modifiedDate": datetime.datetime(2019, 2, 24, 10, 0, 4),
             "actions": [{
                 "actionDate": datetime.datetime(2019, 2, 24, 10, 0, 4),
                 "points": 2

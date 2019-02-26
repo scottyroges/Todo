@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-pipenv run pytest -v
+pipenv run pytest -vv

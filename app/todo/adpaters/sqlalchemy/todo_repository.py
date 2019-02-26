@@ -11,6 +11,9 @@ class TodoRepository:
     def read(self, todo_id):
         todo_record = (self._session.query(Todo)
                        .get(todo_id))
+        if todo_record is None:
+            return None
+
         if todo_record.todo_type == TodoType.HABIT:
             return HabitTransformer.from_record(todo_record)
 
