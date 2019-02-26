@@ -13,6 +13,7 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
     app.config['DEBUG'] = True
     app.config["SQLALCHEMY_ECHO"] = True
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     db.init_app(app)
 
