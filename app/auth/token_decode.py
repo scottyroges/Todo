@@ -2,7 +2,7 @@ from datetime import datetime
 import json
 from jose import jwt, jws
 import logging
-from app.config import config, file_project_path
+from app.config import file_project_path, config
 
 log = logging.getLogger(__name__)
 

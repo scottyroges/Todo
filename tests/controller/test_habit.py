@@ -1,5 +1,9 @@
+import base64
 import datetime
+import hashlib
+import hmac
 import json
+import logging
 
 import pytest
 
@@ -10,6 +14,28 @@ from app.model import (
     Action as ActionRecord
 )
 from app.todo.domains.todo_type import TodoType
+
+
+def gethmacdigest(clientid, username):
+    message = username + clientid
+    dig = hmac.new("clomvs1gg79rvkklsp6b7jfr2960rlcmdrtvujf40vsqa719lbg".encode(), msg=message.encode('UTF-8'), digestmod=hashlib.sha256).digest()
+    return base64.b64encode(dig).decode()
+
+
+def test_authorization():
+    import boto3
+    logging.getLogger('boto3').setLevel(logging.DEBUG)
+    client = boto3.client('cognito-idp', "us-east-2")
+    resp = client.admin_initiate_auth(
+        UserPoolId="us-east-2_GgKNcQC1D",
+        ClientId='5oppr3jcs7v14pr6m6kao1msji',
+        AuthFlow='ADMIN_NO_SRP_AUTH',
+        AuthParameters={
+            "USERNAME": "admin_scott",
+            'PASSWORD': '!Test123',
+            "SECRET_HASH": gethmacdigest('5oppr3jcs7v14pr6m6kao1msji', "admin_scott")
+        })
+    print(resp)
 
 
 @pytest.mark.integration

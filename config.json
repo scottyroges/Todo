@@ -1,6 +1,9 @@
 {
+  "name": "todo",
   "cognitoRegion": "us-east-2",
   "cognitoUserPoolId": "us-east-2_GgKNcQC1D",
   "cognitoUserPoolKeysFile": "jwks.json",
+  "cognitoClientId": "5oppr3jcs7v14pr6m6kao1msji",
+  "cognitoClientSecretKey": "clomvs1gg79rvkklsp6b7jfr2960rlcmdrtvujf40vsqa719lbg",
   "databaseURI": "mysql://admin:D13hARd9VU0@vader.cxx2ji8xwmsz.us-east-2.rds.amazonaws.com:3306/app"
 }

@@ -12,11 +12,17 @@ def file_project_path(filename):
 
 class Config(object):
     def __init__(self):
-        with open(file_project_path('config.json')) as f:
-            self.config = json.load(f)
+        if not os.environ.get("name"):
+            file = file_project_path('../config.json')
+            print("WARNING: no config found so trying to load from local")
+            print("looking for file at %s" % file)
+            with open(file) as f:
+                file_config = json.load(f)
+                for key, val in file_config.items():
+                    os.environ[key] = val
 
     def get(self, key):
-        return self.config.get(key, None)
+        return os.environ.get(key)
 
 
 config = Config()

@@ -9,8 +9,7 @@ from app.errors import AppError
 
 def create_app():
     app = Flask(__name__)
-    db_uri = config.get("databaseURI")
-    app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
+    app.config["SQLALCHEMY_DATABASE_URI"] = config.get("databaseURI")
     app.config['DEBUG'] = True
     app.config["SQLALCHEMY_ECHO"] = True
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False

@@ -5,6 +5,7 @@
         "project_name": "todo",
         "runtime": "python3.6",
         "s3_bucket": "zappa-tgjvsyzjh",
-        "aws_region": "us-east-2"
+        "aws_region": "us-east-2",
+        "remote_env": "s3://zappa-tgjvsyzjh/config.json"
     }
 }
