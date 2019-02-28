@@ -1,6 +1,8 @@
+import boto3
 import pytest
 
 from app.app import create_app
+from app.config import config
 from app.database import db
 
 
@@ -30,6 +32,7 @@ from app.database import db
 #     # transaction.rollback()
 #     # connection.close()
 #     # session.remove()
+from app.utils.helper_methods import get_hmac_digest
 
 
 @pytest.fixture(scope='session')
@@ -67,3 +70,39 @@ def session(request):
 
     request.addfinalizer(teardown)
     return session
+
+
+@pytest.fixture(scope='session')
+def test_user():
+    client = boto3.client('cognito-idp', config.get("cognitoRegion"))
+    resp = client.admin_initiate_auth(
+        UserPoolId=config.get("cognitoUserPoolId"),
+        ClientId=config.get("cognitoClientId"),
+        AuthFlow='ADMIN_NO_SRP_AUTH',
+        AuthParameters={
+            "USERNAME": "test_user",
+            'PASSWORD': config.get("test_user_password"),
+            "SECRET_HASH": get_hmac_digest("test_user")
+        })
+    return {
+        "token": resp.get("AuthenticationResult").get("AccessToken"),
+        "user_id": config.get("test_user_id")
+    }
+
+
+@pytest.fixture(scope='session')
+def test_admin():
+    client = boto3.client('cognito-idp', config.get("cognitoRegion"))
+    resp = client.admin_initiate_auth(
+        UserPoolId=config.get("cognitoUserPoolId"),
+        ClientId=config.get("cognitoClientId"),
+        AuthFlow='ADMIN_NO_SRP_AUTH',
+        AuthParameters={
+            "USERNAME": "test_admin",
+            'PASSWORD': config.get("test_admin_password"),
+            "SECRET_HASH": get_hmac_digest("test_admin")
+        })
+    return {
+        "token": resp.get("AuthenticationResult").get("AccessToken"),
+        "user_id": config.get("test_admin_id")
+    }

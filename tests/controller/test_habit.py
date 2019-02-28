@@ -1,10 +1,5 @@
-import base64
 import datetime
-import hashlib
-import hmac
 import json
-import logging
-
 import pytest
 
 from app.model import (
@@ -16,33 +11,10 @@ from app.model import (
 from app.todo.domains.todo_type import TodoType
 
 
-def gethmacdigest(clientid, username):
-    message = username + clientid
-    dig = hmac.new("clomvs1gg79rvkklsp6b7jfr2960rlcmdrtvujf40vsqa719lbg".encode(), msg=message.encode('UTF-8'), digestmod=hashlib.sha256).digest()
-    return base64.b64encode(dig).decode()
-
-
-def test_authorization():
-    import boto3
-    logging.getLogger('boto3').setLevel(logging.DEBUG)
-    client = boto3.client('cognito-idp', "us-east-2")
-    resp = client.admin_initiate_auth(
-        UserPoolId="us-east-2_GgKNcQC1D",
-        ClientId='5oppr3jcs7v14pr6m6kao1msji',
-        AuthFlow='ADMIN_NO_SRP_AUTH',
-        AuthParameters={
-            "USERNAME": "admin_scott",
-            'PASSWORD': '!Test123',
-            "SECRET_HASH": gethmacdigest('5oppr3jcs7v14pr6m6kao1msji', "admin_scott")
-        })
-    print(resp)
-
-
 @pytest.mark.integration
-def test_habit_create(client, session, mocker):
+def test_habit_create(client, session, test_user):
     todo_data = {
         "name": "habit_test",
-        "todoOwnerId": "123",
         "description": "description",
         "pointsPer": 1,
         "completionPoints": 1,
@@ -59,12 +31,11 @@ def test_habit_create(client, session, mocker):
         "tags": ["who", "knows"]
     }
     data = json.dumps(todo_data)
-    mocker.patch("app.auth.auth_decorator.authorize_request",
-                 return_value={"sub": "123"})
     create_resp = client.post('/habit',
                               data=data,
-                              headers={'Authorization': 'fake_token'})
+                              headers={'Authorization': test_user.get("token")})
     create_data = json.loads(create_resp.data.decode('utf-8'))
+    print(create_data)
     assert create_data is not None
     assert create_data["todoId"] is not None
 
@@ -72,7 +43,7 @@ def test_habit_create(client, session, mocker):
 
     assert habit_record is not None
     assert habit_record.todo_id is not None
-    assert habit_record.todo_owner_id == todo_data["todoOwnerId"]
+    assert habit_record.todo_owner_id == test_user.get("user_id")
     assert habit_record.name == todo_data["name"]
     assert habit_record.description == todo_data["description"]
     assert habit_record.todo_type == TodoType.HABIT

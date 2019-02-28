@@ -12,7 +12,7 @@ from app.todo.todo_factory import TodoFactory
 def test_create_todo_habit():
     todo_data = {
         "name": "habit",
-        "todo_owner_id": "123",
+        "todoOwnerId": "123",
         "description": "description",
         "pointsPer": 1,
         "completionPoints": 1,

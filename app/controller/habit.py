@@ -15,8 +15,8 @@ habit_controller = Blueprint('habit', __name__)
 def create():
     habit_data = json.loads(request.data)
 
-    if not habit_data.get("todo_owner_id"):
-        habit_data["todo_owner_id"] = request.user_id
+    if not habit_data.get("todoOwnerId"):
+        habit_data["todoOwnerId"] = request.user_id
 
     habit = AddTodo().execute(habit_data, TodoType.HABIT)
     return jsonify(habit.to_dict())

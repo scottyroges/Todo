@@ -17,7 +17,7 @@ class TodoFactory:
 
     @classmethod
     def create_habit(cls, habit_data):
-        todo_owner = TodoOwner(owner_id=habit_data.get("todo_owner_id"))
+        todo_owner = TodoOwner(owner_id=habit_data.get("todoOwnerId"))
 
         period_data = habit_data.get('period')
         period = HabitPeriod(period_type=HabitPeriodType[period_data.get("periodType")],

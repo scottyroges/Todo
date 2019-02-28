@@ -14,7 +14,7 @@ def test_add_todo_habit(user_request, todo_repo):
 
     todo_data = {
         "name": "habit",
-        "todo_owner_id": user_request.user_id,
+        "todoOwnerId": user_request.user_id,
         "description": "description",
         "pointsPer": 1,
         "completionPoints": 1,

@@ -6,7 +6,7 @@ from app.todo.todo_factory import TodoFactory
 
 class AddTodo:
     def execute(self, todo_data, todo_type):
-        if not is_owner_or_admin(todo_data.get("todo_owner_id")):
+        if not is_owner_or_admin(todo_data.get("todoOwnerId")):
             raise UnauthorizedError("authorized user does not have permission "
                                     "to create habit for specified user")
 
