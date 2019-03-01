@@ -39,6 +39,19 @@ def test_habit_create(client, session, test_user):
     create_data = json.loads(create_resp.data.decode('utf-8'))
     assert create_data is not None
     assert create_data["todoId"] is not None
+    assert create_data["todoOwnerId"] == test_user.get("user_id")
+    assert create_data["name"] == todo_data["name"]
+    assert create_data["description"] == todo_data["description"]
+    assert create_data["todoType"] == "HABIT"
+    assert create_data["pointsPer"] == todo_data["pointsPer"]
+    assert create_data["completionPoints"] == todo_data["completionPoints"]
+    assert create_data["period"] == {'amount': 1, 'periodType': 'WEEKS', 'start': None}
+    assert create_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
+    assert sorted(create_data["categories"]) == sorted(["test", "again"])
+    assert sorted(create_data["tags"]) == sorted(["who", "knows"])
+    assert create_data["actions"] == []
+    assert create_data["createdDate"] is not None
+    assert create_data["modifiedDate"] is not None
 
     habit_record = session.query(HabitRecord).get(create_data.get("todoId"))
 
@@ -119,6 +132,19 @@ def test_habit_create_admin(client, session, test_admin):
     create_data = json.loads(create_resp.data.decode('utf-8'))
     assert create_data is not None
     assert create_data["todoId"] is not None
+    assert create_data["todoOwnerId"] == todo_data["todoOwnerId"]
+    assert create_data["name"] == todo_data["name"]
+    assert create_data["description"] == todo_data["description"]
+    assert create_data["todoType"] == "HABIT"
+    assert create_data["pointsPer"] == todo_data["pointsPer"]
+    assert create_data["completionPoints"] == todo_data["completionPoints"]
+    assert create_data["period"] == {'amount': 1, 'periodType': 'WEEKS', 'start': None}
+    assert create_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
+    assert sorted(create_data["categories"]) == sorted(["test", "again"])
+    assert sorted(create_data["tags"]) == sorted(["who", "knows"])
+    assert create_data["actions"] == []
+    assert create_data["createdDate"] is not None
+    assert create_data["modifiedDate"] is not None
 
     habit_record = session.query(HabitRecord).get(create_data.get("todoId"))
 
