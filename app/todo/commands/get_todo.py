@@ -9,7 +9,7 @@ class GetTodo:
         todo = repo.read(todo_id)
 
         if not todo:
-            raise NotFoundError("No habit with todo_id %s" % todo_id)
+            raise NotFoundError("No todo with todo_id %s" % todo_id)
 
         if not is_owner_or_admin(todo.todo_owner.owner_id):
             raise UnauthorizedError("authorized user does not have permission "

@@ -3,6 +3,7 @@ from flask import Flask, jsonify
 from app.config import config
 from app.controller.action import action_controller
 from app.controller.habit import habit_controller
+from app.controller.reoccur import reoccur_controller
 from app.database import db
 from app.errors import AppError
 
@@ -18,6 +19,7 @@ def create_app():
 
     app.register_blueprint(habit_controller)
     app.register_blueprint(action_controller)
+    app.register_blueprint(reoccur_controller)
 
     @app.errorhandler(AppError)
     def handle_invalid_usage(error):

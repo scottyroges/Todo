@@ -38,3 +38,18 @@ class Todo:
 
     def perform_action(self, action):
         self.actions.append(action)
+
+    def to_dict(self):
+        return {
+            "todoId": self.todo_id,
+            "todoOwnerId": self.todo_owner.owner_id,
+            "name": self.name,
+            "description": self.description,
+            "todoType": self.todo_type.name,
+            "completionPoints": self.completion_points,
+            "categories": [category.name for category in self.categories],
+            "tags": [tag.name for tag in self.tags],
+            "actions": [action.to_dict() for action in self.actions],
+            "createdDate": self.created_date,
+            "modifiedDate": self.modified_date
+        }

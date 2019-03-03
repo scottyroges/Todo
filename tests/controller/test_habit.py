@@ -45,6 +45,7 @@ def test_habit_create(client, session, test_user):
     assert create_data["todoType"] == "HABIT"
     assert create_data["pointsPer"] == todo_data["pointsPer"]
     assert create_data["completionPoints"] == todo_data["completionPoints"]
+    assert create_data["frequency"] == todo_data["frequency"]
     assert create_data["period"] == {'amount': 1, 'periodType': 'WEEKS', 'start': None}
     assert create_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
     assert sorted(create_data["categories"]) == sorted(["test", "again"])
@@ -63,6 +64,7 @@ def test_habit_create(client, session, test_user):
     assert habit_record.todo_type == TodoType.HABIT
     assert habit_record.points_per == todo_data["pointsPer"]
     assert habit_record.completion_points == todo_data["completionPoints"]
+    assert habit_record.frequency == todo_data["frequency"]
     assert habit_record.period == {'amount': 1, 'periodType': 'WEEKS', 'start': None}
     assert habit_record.buffer == {'amount': 1, 'bufferType': 'DAY_START'}
     assert len(habit_record.categories) == 2
@@ -137,6 +139,7 @@ def test_habit_create_admin(client, session, test_admin):
     assert create_data["description"] == todo_data["description"]
     assert create_data["todoType"] == "HABIT"
     assert create_data["pointsPer"] == todo_data["pointsPer"]
+    assert create_data["frequency"] == todo_data["frequency"]
     assert create_data["completionPoints"] == todo_data["completionPoints"]
     assert create_data["period"] == {'amount': 1, 'periodType': 'WEEKS', 'start': None}
     assert create_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
@@ -156,6 +159,7 @@ def test_habit_create_admin(client, session, test_admin):
     assert habit_record.todo_type == TodoType.HABIT
     assert habit_record.points_per == todo_data["pointsPer"]
     assert habit_record.completion_points == todo_data["completionPoints"]
+    assert habit_record.frequency == todo_data["frequency"]
     assert habit_record.period == {'amount': 1, 'periodType': 'WEEKS', 'start': None}
     assert habit_record.buffer == {'amount': 1, 'bufferType': 'DAY_START'}
     assert len(habit_record.categories) == 2
@@ -221,6 +225,7 @@ def test_habit_read(client, session, test_user):
     assert fetch_data["todoType"] == habit_record.todo_type.name
     assert fetch_data["pointsPer"] == habit_record.points_per
     assert fetch_data["completionPoints"] == habit_record.completion_points
+    assert fetch_data["frequency"] == habit_record.frequency
     assert fetch_data["period"] == {'amount': 1, 'periodType': 'WEEKS', 'start': None}
     assert fetch_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
     assert sorted(fetch_data["categories"]) == sorted(["test", "again"])
@@ -261,6 +266,7 @@ def test_habit_read_admin(client, session, test_admin):
     assert fetch_data["todoType"] == habit_record.todo_type.name
     assert fetch_data["pointsPer"] == habit_record.points_per
     assert fetch_data["completionPoints"] == habit_record.completion_points
+    assert fetch_data["frequency"] == habit_record.frequency
     assert fetch_data["period"] == {'amount': 1, 'periodType': 'WEEKS', 'start': None}
     assert fetch_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
     assert sorted(fetch_data["categories"]) == sorted(["test", "again"])

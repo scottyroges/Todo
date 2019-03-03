@@ -2,17 +2,15 @@ from app.todo.domains.todo import Todo
 from app.todo.domains.todo_type import TodoType
 
 
-class Habit(Todo):
+class Reoccur(Todo):
     def __init__(self,
                  todo_id=None,
                  todo_owner=None,
                  name=None,
                  description=None,
-                 points_per=None,
                  completion_points=None,
-                 frequency=None,
-                 period=None,
-                 buffer=None,
+                 repeat=None,
+                 required=None,
                  categories=None,
                  tags=None,
                  actions=None,
@@ -22,31 +20,23 @@ class Habit(Todo):
                          todo_owner=todo_owner,
                          name=name,
                          description=description,
-                         todo_type=TodoType.HABIT,
-                         completion_points=completion_points,
+                         todo_type=TodoType.REOCCUR,
                          categories=categories,
+                         completion_points=completion_points,
                          tags=tags,
                          actions=actions,
                          created_date=created_date,
                          modified_date=modified_date)
-        self.points_per = points_per or 0
-        self.frequency = frequency
-        self.period = period
-        self.buffer = buffer
+        self.repeat = repeat
+        self.required = required or False
 
     def to_dict(self):
         todo_dict = super().to_dict()
         todo_dict.update({
-            "pointsPer": self.points_per,
-            "frequency": self.frequency,
-            "period": {
-                "periodType": self.period.period_type.name,
-                "amount": self.period.amount,
-                "start": self.period.start
+            "repeat": {
+                "repeatType": self.repeat.repeat_type.name,
+                "when": self.repeat.when
             },
-            "buffer": {
-                "bufferType": self.buffer.buffer_type.name,
-                "amount": self.buffer.amount,
-            }
+            "required": self.required
         })
         return todo_dict

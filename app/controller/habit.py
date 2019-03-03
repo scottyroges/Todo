@@ -27,5 +27,3 @@ def create():
 def read(todo_id):
     habit = GetTodo().execute(todo_id)
     return jsonify(habit.to_dict())
-
-

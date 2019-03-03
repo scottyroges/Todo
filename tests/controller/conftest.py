@@ -4,34 +4,6 @@ import pytest
 from app.app import create_app
 from app.config import config
 from app.database import db
-
-
-# @pytest.fixture
-# def client():
-#     app = create_app()
-#     app.config['TESTING'] = True
-#     client = app.test_client()
-#
-#     yield client
-#
-#
-# @pytest.fixture(scope='function')
-# def session():
-#     return
-#     # """Creates a new database session for a test."""
-#     # connection = db.engine.connect()
-#     # transaction = connection.begin()
-#     #
-#     # options = dict(bind=connection, binds={})
-#     # session = db.create_scoped_session(options=options)
-#     #
-#     # db.session = session
-#     #
-#     # yield session
-#     #
-#     # transaction.rollback()
-#     # connection.close()
-#     # session.remove()
 from app.utils.helper_methods import get_hmac_digest
 
 

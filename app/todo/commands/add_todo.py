@@ -11,4 +11,4 @@ class AddTodo:
                                     "to create habit for specified user")
 
         todo = TodoFactory.create_todo(todo_data, todo_type)
-        return TodoRepositoryFactory.create(todo).add(todo)
+        return TodoRepositoryFactory.create().add(todo)
