@@ -87,3 +87,33 @@ def test_create_todo_reoccur():
     assert todo.actions == []
     assert todo.created_date == datetime.datetime(2019, 2, 24)
     assert todo.modified_date == datetime.datetime(2019, 2, 24)
+
+
+@freeze_time("2019-02-24")
+def test_create_todo_task():
+    todo_data = {
+        "name": "task",
+        "todoOwnerId": "123",
+        "description": "description",
+        "completionPoints": 1,
+        "dueDate": "2019-03-03 00:03:05",
+        "categories": ["test", "again"],
+        "tags": ["who", "knows"]
+    }
+    todo_type = TodoType.TASK
+    todo = TodoFactory.create_todo(todo_data, todo_type)
+
+    assert todo.todo_id is not None
+    assert todo.name == "task"
+    assert todo.todo_owner.owner_id == "123"
+    assert todo.description == "description"
+    assert todo.todo_type == TodoType.TASK
+    assert todo.completion_points == 1
+    assert todo.due_date == datetime.datetime(2019, 3, 3, 0, 3, 5)
+    for category in todo.categories:
+        assert category.name in ["test", "again"]
+    for tag in todo.tags:
+        assert tag.name in ["who", "knows"]
+    assert todo.actions == []
+    assert todo.created_date == datetime.datetime(2019, 2, 24)
+    assert todo.modified_date == datetime.datetime(2019, 2, 24)
