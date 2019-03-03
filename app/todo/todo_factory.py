@@ -1,3 +1,5 @@
+import datetime
+
 from app.todo.domains.category import Category
 from app.todo.domains.habit.habit import Habit
 from app.todo.domains.habit.habit_buffer import HabitBuffer, HabitBufferType
@@ -5,6 +7,7 @@ from app.todo.domains.habit.habit_period import HabitPeriod, HabitPeriodType
 from app.todo.domains.reoccur.reoccur import Reoccur
 from app.todo.domains.reoccur.reoccur_repeat import ReoccurRepeat, ReoccurRepeatType
 from app.todo.domains.tag import Tag
+from app.todo.domains.task.task import Task
 from app.todo.domains.todo_owner import TodoOwner
 from app.todo.domains.todo_type import TodoType
 
@@ -18,6 +21,8 @@ class TodoFactory:
             todo = cls.create_habit(todo_owner, todo_data)
         elif todo_type == TodoType.REOCCUR:
             todo = cls.create_reoccur(todo_owner, todo_data)
+        elif todo_type == TodoType.TASK:
+            todo = cls.create_task(todo_owner, todo_data)
         else:
             print("wtf")
 
@@ -64,3 +69,14 @@ class TodoFactory:
                           repeat=repeat,
                           required=reoccur_data.get("required"))
         return reoccur
+
+    @classmethod
+    def create_task(cls, todo_owner, task_data):
+        due_date = datetime.datetime.strptime(task_data.get("dueDate"),
+                                              '%Y-%m-%d %H:%M:%S')
+        task = Task(todo_owner=todo_owner,
+                    name=task_data.get('name'),
+                    description=task_data.get('description'),
+                    completion_points=task_data.get('completionPoints'),
+                    due_date=due_date)
+        return task

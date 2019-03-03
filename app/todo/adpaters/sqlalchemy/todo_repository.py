@@ -3,6 +3,7 @@ from app.database import db
 from app.todo.domains.todo_type import TodoType
 from app.todo.transformers.habit_transformer import HabitTransformer
 from app.todo.transformers.reoccur_transformer import ReoccurTransformer
+from app.todo.transformers.task_transformer import TaskTransformer
 
 
 class TodoRepository:
@@ -36,3 +37,5 @@ class TodoRepository:
             return HabitTransformer
         elif todo_type == TodoType.REOCCUR:
             return ReoccurTransformer
+        elif todo_type == TodoType.TASK:
+            return TaskTransformer
