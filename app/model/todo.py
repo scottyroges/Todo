@@ -9,7 +9,6 @@ class Todo(db.Model, TimeMixin):
     name = db.Column(db.String(255))
     description = db.Column(db.Text)
     todo_type = db.Column(db.Enum(TodoType))
-    points_per = db.Column(db.Integer)
     completion_points = db.Column(db.Integer)
     categories = db.relationship("Category", lazy='joined')
     tags = db.relationship("Tag", lazy='joined')
