@@ -18,8 +18,7 @@ class HabitTransformer:
     def to_record(cls, habit: DomainHabit):
         period = {
             "periodType": habit.period.period_type.name,
-            "amount": habit.period.amount,
-            "start": habit.period.start
+            "amount": habit.period.amount
         }
 
         buffer = {
@@ -60,8 +59,7 @@ class HabitTransformer:
     def from_record(cls, habit_record: HabitRecord):
         todo_owner = TodoOwner(owner_id=habit_record.todo_owner_id)
         period = HabitPeriod(period_type=HabitPeriodType[habit_record.period.get("periodType")],
-                             amount=habit_record.period.get("amount"),
-                             start=habit_record.period.get("start"))
+                             amount=habit_record.period.get("amount"))
         buffer = HabitBuffer(buffer_type=HabitBufferType[habit_record.buffer.get("bufferType")],
                              amount=habit_record.buffer.get("amount"))
         categories = [DomainCategory(category_id=category.id,

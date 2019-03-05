@@ -22,8 +22,7 @@ from app.todo.transformers.habit_transformer import HabitTransformer
 def test_to_record():
     todo_owner = TodoOwner(owner_id="123")
     period = HabitPeriod(period_type=HabitPeriodType.WEEKS,
-                         amount=1,
-                         start=None)
+                         amount=1)
     buffer = HabitBuffer(buffer_type=HabitBufferType.DAY_START,
                          amount=1)
     categories = [DomainCategory(name="test"), DomainCategory(name="again")]
@@ -53,8 +52,7 @@ def test_to_record():
     assert habit_record.frequency == habit.frequency
     assert habit_record.period == {
         'amount': 1,
-        'periodType': 'WEEKS',
-        'start': None
+        'periodType': 'WEEKS'
     }
     assert habit_record.buffer == {
         'amount': 1,
@@ -75,8 +73,7 @@ def test_to_record():
 def test_from_record():
     period = {
         'amount': 1,
-        'periodType': 'WEEKS',
-        'start': None
+        'periodType': 'WEEKS'
     }
     buffer = {
         'amount': 1,
@@ -113,7 +110,6 @@ def test_from_record():
     assert habit.frequency == habit_record.frequency
     assert habit.period.amount == 1
     assert habit.period.period_type == HabitPeriodType.WEEKS
-    assert habit.period.start is None
     assert habit.buffer.amount == 1
     assert habit.buffer.buffer_type == HabitBufferType.DAY_START
     for category in habit.categories:

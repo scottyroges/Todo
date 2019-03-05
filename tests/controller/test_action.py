@@ -69,7 +69,7 @@ class TestPerformActionHabit:
         assert create_data["pointsPer"] == 1
         assert create_data["completionPoints"] == 1
         assert create_data["frequency"] == 1
-        assert create_data["period"] == {'amount': 1, 'periodType': 'WEEKS', 'start': None}
+        assert create_data["period"] == {'amount': 1, 'periodType': 'WEEKS'}
         assert create_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
         assert sorted(create_data["categories"]) == sorted(["test", "again"])
         assert sorted(create_data["tags"]) == sorted(["who", "knows"])
@@ -130,7 +130,7 @@ class TestPerformActionHabit:
         assert create_data["pointsPer"] == 1
         assert create_data["completionPoints"] == 1
         assert create_data["frequency"] == 1
-        assert create_data["period"] == {'amount': 1, 'periodType': 'WEEKS', 'start': None}
+        assert create_data["period"] == {'amount': 1, 'periodType': 'WEEKS'}
         assert create_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
         assert sorted(create_data["categories"]) == sorted(["test", "again"])
         assert sorted(create_data["tags"]) == sorted(["who", "knows"])

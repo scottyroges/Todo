@@ -3,16 +3,16 @@ from enum import Enum
 
 class HabitPeriodType(Enum):
     DAYS = "days"
-    HOURS = "hours"
     WEEKS = "weeks"
     MONTHS = "months"
+    YEARS = "years"
 
 
 class HabitPeriod:
     def __init__(self,
                  period_type: HabitPeriodType,
-                 amount,
-                 start):
+                 amount=None):
         self.period_type = period_type
-        self.amount = amount
-        self.start = start
+        # making this always one for now
+        # it simplifies the is complete part
+        self.amount = 1

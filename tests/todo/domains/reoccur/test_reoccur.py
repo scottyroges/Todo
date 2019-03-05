@@ -50,3 +50,4 @@ def test_to_dict():
             "points": 2
         }]
     }
+

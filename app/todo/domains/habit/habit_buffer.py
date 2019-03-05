@@ -4,6 +4,9 @@ from enum import Enum
 class HabitBufferType(Enum):
     DAY_START = "day_start",
     HOURS = "hours"
+    DAYS = "days"
+    WEEKS = "weeks"
+    MONTHS = "months"
 
 
 class HabitBuffer:

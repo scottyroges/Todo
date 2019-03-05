@@ -21,8 +21,7 @@ class TestGetTodoHabit:
     def _create_habit(self):
         todo_owner = TodoOwner(owner_id="123")
         period = HabitPeriod(period_type=HabitPeriodType.WEEKS,
-                             amount=1,
-                             start=None)
+                             amount=1)
         buffer = HabitBuffer(buffer_type=HabitBufferType.DAY_START,
                              amount=1)
         categories = [Category(name="test"), Category(name="again")]

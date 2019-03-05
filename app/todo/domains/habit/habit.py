@@ -1,3 +1,8 @@
+import calendar
+import datetime
+
+from app.todo.domains.habit.habit_buffer import HabitBufferType
+from app.todo.domains.habit.habit_period import HabitPeriodType
 from app.todo.domains.todo import Todo
 from app.todo.domains.todo_type import TodoType
 
@@ -41,8 +46,7 @@ class Habit(Todo):
             "frequency": self.frequency,
             "period": {
                 "periodType": self.period.period_type.name,
-                "amount": self.period.amount,
-                "start": self.period.start
+                "amount": self.period.amount
             },
             "buffer": {
                 "bufferType": self.buffer.buffer_type.name,
@@ -50,3 +54,52 @@ class Habit(Todo):
             }
         })
         return todo_dict
+
+    @property
+    def is_complete(self):
+        # TODO: this our out default start time for daily tasks 4am,
+        # i have a feeling this might cause some issues with timezones
+        today = datetime.datetime.today().replace(hour=4, minute=0, second=0, microsecond=0)
+        if self.period.period_type == HabitPeriodType.DAYS:
+            start = today - datetime.timedelta(days=self.period.amount - 1)
+        elif self.period.period_type == HabitPeriodType.WEEKS:
+            start = today - datetime.timedelta(days=today.weekday())
+        elif self.period.period_type == HabitPeriodType.MONTHS:
+            start = today - datetime.timedelta(days=today.day-1)
+        elif self.period.period_type == HabitPeriodType.YEARS:
+            start = today.replace(month=1, day=1)
+        current_actions = [action for action in self.actions
+                           if action.action_date > start]
+        return len(current_actions) >= self.frequency
+
+    @property
+    def should_show(self):
+        if self.buffer is None or len(self.actions) == 0:
+            return True
+
+        if self.is_complete:
+            return False
+
+        # TODO: This is not taking into account the start of a period, should it?
+        last_action = sorted(self.actions,
+                             key=lambda x: x.action_date,
+                             reverse=True)[0]
+        today = datetime.datetime.today()
+
+        if self.buffer.buffer_type == HabitBufferType.HOURS:
+            buffer_cutoff = last_action.action_date + datetime.timedelta(hours=self.buffer.amount)
+        elif self.buffer.buffer_type == HabitBufferType.DAYS:
+            buffer_cutoff = last_action.action_date + datetime.timedelta(days=self.buffer.amount)
+        elif self.buffer.buffer_type == HabitBufferType.DAY_START:
+            current_day_start = last_action.action_date.replace(hour=4, minute=0, second=0, microsecond=0)
+            if today < current_day_start:
+                current_day_start = current_day_start - datetime.timedelta(days=1)
+
+            buffer_cutoff = current_day_start + datetime.timedelta(days=self.buffer.amount)
+        elif self.buffer.buffer_type == HabitBufferType.WEEKS:
+            buffer_cutoff = last_action.action_date + datetime.timedelta(days=self.buffer.amount * 7)
+        elif self.buffer.buffer_type == HabitBufferType.MONTHS:
+            buffer_cutoff = last_action.action_date.replace(month=last_action.action_date.month + self.buffer.amount)
+
+        return today > buffer_cutoff
+

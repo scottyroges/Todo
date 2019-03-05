@@ -40,8 +40,7 @@ class TodoFactory:
     def create_habit(cls, todo_owner, habit_data):
         period_data = habit_data.get('period')
         period = HabitPeriod(period_type=HabitPeriodType[period_data.get("periodType")],
-                             amount=period_data.get("amount"),
-                             start=period_data.get("start"))
+                             amount=period_data.get("amount"))
 
         buffer_data = habit_data.get('buffer')
         buffer = HabitBuffer(buffer_type=HabitBufferType[buffer_data.get("bufferType")],
