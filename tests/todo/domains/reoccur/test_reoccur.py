@@ -257,3 +257,492 @@ class TestShouldShowDayOfWeekRequired:
                           actions=actions)
 
         assert reoccur.should_show is True
+
+
+class TestShouldShowDayOfMonth:
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_month_no_action_on_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_MONTH,
+                               when=[7])
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=False,
+                          repeat=repeat)
+
+        assert reoccur.should_show is True
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_month_not_last_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_MONTH,
+                               when=["LAST"])
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=False,
+                          repeat=repeat)
+
+        assert reoccur.should_show is False
+
+    @freeze_time("2019-03-31 21:00:00")
+    def test_should_show_day_of_month_last_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_MONTH,
+                               when=["LAST"])
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=False,
+                          repeat=repeat)
+
+        assert reoccur.should_show is True
+
+    @freeze_time("2019-03-31 21:00:00")
+    def test_should_show_day_of_month_last_day_complete(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_MONTH,
+                               when=["LAST"])
+        actions = [Action(action_date=datetime.datetime(2019, 3, 31, 11, 12, 5),
+                          points=1)]
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=False,
+                          repeat=repeat,
+                          actions=actions)
+
+        assert reoccur.should_show is False
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_month_no_action_not_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_MONTH,
+                               when=[2])
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=False,
+                          repeat=repeat)
+
+        assert reoccur.should_show is False
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_month_complete_today(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_MONTH,
+                               when=[4, 7])
+        actions = [Action(action_date=datetime.datetime(2019, 3, 4, 11, 12, 5),
+                          points=1),
+                   Action(action_date=datetime.datetime(2019, 3, 7, 11, 12, 5),
+                          points=1)
+                   ]
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=False,
+                          repeat=repeat,
+                          actions=actions)
+
+        assert reoccur.should_show is False
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_is_should_show_of_month_complete_not_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_MONTH,
+                               when=[4, 6])
+        actions = [Action(action_date=datetime.datetime(2019, 3, 4, 11, 12, 5),
+                          points=1)]
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=False,
+                          repeat=repeat,
+                          actions=actions)
+
+        assert reoccur.should_show is False
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_month_complete_not_complete_on_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_MONTH,
+                               when=[4, 7])
+        actions = [Action(action_date=datetime.datetime(2019, 3, 4, 11, 12, 5),
+                          points=1)]
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=False,
+                          repeat=repeat,
+                          actions=actions)
+
+        assert reoccur.should_show is True
+
+
+class TestShouldShowDayOfMonthRequired:
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_month_no_action_on_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_MONTH,
+                               when=[7])
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=True,
+                          repeat=repeat)
+
+        assert reoccur.should_show is True
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_month_not_last_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_MONTH,
+                               when=["LAST"])
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=True,
+                          repeat=repeat)
+
+        assert reoccur.should_show is False
+
+    @freeze_time("2019-03-31 21:00:00")
+    def test_should_show_day_of_month_last_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_MONTH,
+                               when=["LAST"])
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=True,
+                          repeat=repeat)
+
+        assert reoccur.should_show is True
+
+    @freeze_time("2019-03-31 21:00:00")
+    def test_should_show_day_of_month_last_day_complete(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_MONTH,
+                               when=["LAST"])
+        actions = [Action(action_date=datetime.datetime(2019, 3, 31, 11, 12, 5),
+                          points=1)]
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=True,
+                          repeat=repeat,
+                          actions=actions)
+
+        assert reoccur.should_show is False
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_month_no_action_not_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_MONTH,
+                               when=[2])
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=True,
+                          repeat=repeat)
+
+        assert reoccur.should_show is True
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_month_complete_today(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_MONTH,
+                               when=[4, 7])
+        actions = [Action(action_date=datetime.datetime(2019, 3, 4, 11, 12, 5),
+                          points=1),
+                   Action(action_date=datetime.datetime(2019, 3, 7, 11, 12, 5),
+                          points=1)
+                   ]
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=True,
+                          repeat=repeat,
+                          actions=actions)
+
+        assert reoccur.should_show is False
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_is_should_show_of_month_complete_not_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_MONTH,
+                               when=[4, 6])
+        actions = [Action(action_date=datetime.datetime(2019, 3, 4, 11, 12, 5),
+                          points=1)]
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=True,
+                          repeat=repeat,
+                          actions=actions)
+
+        assert reoccur.should_show is True
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_month_complete_not_complete_on_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_MONTH,
+                               when=[4, 7])
+        actions = [Action(action_date=datetime.datetime(2019, 3, 4, 11, 12, 5),
+                          points=1)]
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=True,
+                          repeat=repeat,
+                          actions=actions)
+
+        assert reoccur.should_show is True
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_month_not_complete_not_on_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_MONTH,
+                               when=[4, 6])
+        actions = [Action(action_date=datetime.datetime(2019, 3, 4, 11, 12, 5),
+                          points=1)]
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=True,
+                          repeat=repeat,
+                          actions=actions)
+
+        assert reoccur.should_show is True
+
+
+class TestShouldShowDayOfYear:
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_year_no_action_on_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_YEAR,
+                               when=["3-7"])
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=False,
+                          repeat=repeat)
+
+        assert reoccur.should_show is True
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_year_no_action_not_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_YEAR,
+                               when=["1-14"])
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=False,
+                          repeat=repeat)
+
+        assert reoccur.should_show is False
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_year_complete_today(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_YEAR,
+                               when=["1-14", "3-7"])
+        actions = [Action(action_date=datetime.datetime(2019, 1, 14, 11, 12, 5),
+                          points=1),
+                   Action(action_date=datetime.datetime(2019, 3, 7, 11, 12, 5),
+                          points=1)
+                   ]
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=False,
+                          repeat=repeat,
+                          actions=actions)
+
+        assert reoccur.should_show is False
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_is_should_show_of_year_complete_not_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_YEAR,
+                               when=["1-14", "6-10"])
+        actions = [Action(action_date=datetime.datetime(2019, 3, 4, 11, 12, 5),
+                          points=1)]
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=False,
+                          repeat=repeat,
+                          actions=actions)
+
+        assert reoccur.should_show is False
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_year_complete_not_complete_on_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_YEAR,
+                               when=["1-14", "3-7"])
+        actions = [Action(action_date=datetime.datetime(2019, 1, 14, 11, 12, 5),
+                          points=1)]
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=False,
+                          repeat=repeat,
+                          actions=actions)
+
+        assert reoccur.should_show is True
+
+
+class TestShouldShowDayOfYearRequired:
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_year_no_action_on_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_YEAR,
+                               when=["3-7"])
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=True,
+                          repeat=repeat)
+
+        assert reoccur.should_show is True
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_year_no_action_not_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_YEAR,
+                               when=["1-14"])
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=True,
+                          repeat=repeat)
+
+        assert reoccur.should_show is True
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_year_complete_today(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_YEAR,
+                               when=["1-14", "3-7"])
+        actions = [Action(action_date=datetime.datetime(2019, 1, 14, 11, 12, 5),
+                          points=1),
+                   Action(action_date=datetime.datetime(2019, 3, 7, 11, 12, 5),
+                          points=1)
+                   ]
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=True,
+                          repeat=repeat,
+                          actions=actions)
+
+        assert reoccur.should_show is False
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_is_should_show_of_year_complete_not_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_YEAR,
+                               when=["1-4", "6-10"])
+        actions = [Action(action_date=datetime.datetime(2019, 1, 14, 11, 12, 5),
+                          points=1)]
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=True,
+                          repeat=repeat,
+                          actions=actions)
+
+        assert reoccur.should_show is False
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_year_complete_not_complete_on_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_YEAR,
+                               when=["1-14", "3-7"])
+        actions = [Action(action_date=datetime.datetime(2019, 1, 14, 11, 12, 5),
+                          points=1)]
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=True,
+                          repeat=repeat,
+                          actions=actions)
+
+        assert reoccur.should_show is True
+
+    @freeze_time("2019-03-07 21:00:00")
+    def test_should_show_day_of_year_not_complete_not_on_repeat_day(self):
+        todo_owner = TodoOwner(owner_id="123")
+        repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_YEAR,
+                               when=["1-14", "3-6"])
+        actions = [Action(action_date=datetime.datetime(2019, 1, 14, 11, 12, 5),
+                          points=1)]
+        reoccur = Reoccur(todo_id="abc",
+                          todo_owner=todo_owner,
+                          name="reoccur",
+                          description="description",
+                          completion_points=1,
+                          required=True,
+                          repeat=repeat,
+                          actions=actions)
+
+        assert reoccur.should_show is True
+
