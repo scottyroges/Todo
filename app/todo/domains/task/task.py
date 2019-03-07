@@ -34,3 +34,7 @@ class Task(Todo):
             "dueDate": self.due_date
         })
         return todo_dict
+
+    @property
+    def should_show(self):
+        return self.last_action is None

@@ -81,10 +81,9 @@ class Habit(Todo):
             return False
 
         # TODO: This is not taking into account the start of a period, should it?
-        last_action = sorted(self.actions,
-                             key=lambda x: x.action_date,
-                             reverse=True)[0]
+
         today = datetime.datetime.today()
+        last_action = self.last_action
 
         if self.buffer.buffer_type == HabitBufferType.HOURS:
             buffer_cutoff = last_action.action_date + datetime.timedelta(hours=self.buffer.amount)

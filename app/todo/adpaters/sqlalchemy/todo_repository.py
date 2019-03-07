@@ -25,6 +25,11 @@ class TodoRepository:
 
         return self._get_transformer(todo_record.todo_type).from_record(todo_record)
 
+    def read_all(self, user_id):
+        todo_records = self._session.query(Todo).filter_by(todo_owner_id=user_id).all()
+        return [self._get_transformer(todo_record.todo_type).from_record(todo_record)
+                for todo_record in todo_records]
+
     def update(self, todo):
         todo_record = self._get_transformer(todo.todo_type).to_record(todo)
 

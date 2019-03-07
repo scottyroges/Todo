@@ -5,8 +5,9 @@ from freezegun import freeze_time
 from app.todo.domains.action import Action
 from app.todo.domains.category import Category
 from app.todo.domains.tag import Tag
-from app.todo.domains.task.task import Task
+from app.todo.domains.todo import Todo
 from app.todo.domains.todo_owner import TodoOwner
+from app.todo.domains.todo_type import TodoType
 
 
 @freeze_time("2019-02-24 10:00:04")
@@ -15,24 +16,23 @@ def test_to_dict():
     categories = [Category(name="test"), Category(name="again")]
     tags = [Tag(name="who"), Tag(name="knows")]
     actions = [Action(points=2)]
-    task = Task(todo_id="abc",
+    todo = Todo(todo_id="abc",
                 todo_owner=todo_owner,
-                name="task",
+                name="todo",
                 description="description",
+                todo_type=TodoType.TASK,
                 completion_points=1,
-                due_date=datetime.datetime(2019, 3, 2, 11, 32, 5),
                 categories=categories,
                 tags=tags,
                 actions=actions)
 
-    assert task.to_dict() == {
+    assert todo.to_dict() == {
         "todoId": "abc",
         "todoOwnerId": "123",
-        "name": "task",
+        "name": "todo",
         "description": "description",
         "todoType": "TASK",
         "completionPoints": 1,
-        "dueDate": datetime.datetime(2019, 3, 2, 11, 32, 5),
         "categories": ["test", "again"],
         "tags": ["who", "knows"],
         "createdDate": datetime.datetime(2019, 2, 24, 10, 0, 4),
@@ -44,28 +44,17 @@ def test_to_dict():
     }
 
 
-def test_should_show_no_action():
-    todo_owner = TodoOwner(owner_id="123")
-    task = Task(todo_id="abc",
-                todo_owner=todo_owner,
-                name="task",
-                description="description",
-                completion_points=1,
-                due_date=datetime.datetime(2019, 3, 2, 11, 32, 5))
+def test_last_action_none():
+    todo = Todo()
 
-    assert task.should_show is True
+    assert todo.last_action is None
 
 
-def test_should_show_action():
-    todo_owner = TodoOwner(owner_id="123")
-    actions = [Action(action_date=datetime.datetime(2019, 3, 2, 10, 0, 0),
-                      points=2)]
-    task = Task(todo_id="abc",
-                todo_owner=todo_owner,
-                name="task",
-                description="description",
-                completion_points=1,
-                due_date=datetime.datetime(2019, 3, 2, 11, 32, 5),
-                actions=actions)
+def test_last_action_none():
+    todo = Todo()
+    todo.perform_action(Action(action_date=datetime.datetime(2019, 3, 6)))
+    todo.perform_action(Action(action_date=datetime.datetime(2019, 3, 4)))
+    todo.perform_action(Action(action_date=datetime.datetime(2019, 3, 1)))
 
-    assert task.should_show is False
+    assert todo.last_action is not None
+    assert todo.last_action.action_date == datetime.datetime(2019, 3, 6)

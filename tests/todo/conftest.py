@@ -19,6 +19,10 @@ class TestTodoRepository:
                 return todo
         return None
 
+    def read_all(self, user_id):
+        return list(filter(lambda x: x.todo_owner.owner_id == user_id,
+                      self.todos))
+
     def add(self, todo):
         self.todos.append(todo)
         return todo

@@ -1,3 +1,4 @@
+import calendar
 import datetime
 
 from app.todo.domains.reoccur.reoccur_repeat import ReoccurRepeatType
@@ -45,12 +46,34 @@ class Reoccur(Todo):
         return todo_dict
 
     @property
-    def is_complete(self):
-        today = datetime.datetime.today().replace(hour=4, minute=0, second=0, microsecond=0)
+    def should_show(self):
+
+        today = datetime.datetime.today()
         if self.repeat.repeat_type == ReoccurRepeatType.DAY_OF_WEEK:
-            start = today - datetime.timedelta(days=today.weekday())
-        current_actions = [action for action in self.actions
-                           if action.action_date > start]
+            if self.required:
+                days = dict(zip(calendar.day_name, range(7)))
+                num_actions_expected = 0
+                for when in self.repeat.when:
+                    if days[when] <= today.weekday():
+                        num_actions_expected += 1
+
+                week_start = today.replace(hour=4, minute=0, second=0, microsecond=0) - datetime.timedelta(days=today.weekday())
+                current_actions = [action for action in self.actions
+                                   if action.action_date > week_start]
+
+                return len(current_actions) < num_actions_expected
+
+            # repeat day
+            if not calendar.day_name[today.weekday()] in self.repeat.when:
+                return False
+
+            last_action = self.last_action
+
+            # no actions
+            if last_action is None:
+                return True
+
+            return self.last_action.action_date.date() != today.date()
         return False
 
 

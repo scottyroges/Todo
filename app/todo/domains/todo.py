@@ -53,3 +53,12 @@ class Todo:
             "createdDate": self.created_date,
             "modifiedDate": self.modified_date
         }
+
+    @property
+    def last_action(self):
+        if len(self.actions) == 0:
+            return None
+
+        return sorted(self.actions,
+                      key=lambda x: x.action_date,
+                      reverse=True)[0]
