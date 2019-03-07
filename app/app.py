@@ -5,6 +5,7 @@ from app.controller.action import action_controller
 from app.controller.habit import habit_controller
 from app.controller.reoccur import reoccur_controller
 from app.controller.task import task_controller
+from app.controller.todo import todo_controller
 from app.database import db
 from app.errors import AppError
 
@@ -22,6 +23,7 @@ def create_app():
     app.register_blueprint(action_controller)
     app.register_blueprint(reoccur_controller)
     app.register_blueprint(task_controller)
+    app.register_blueprint(todo_controller)
 
     @app.errorhandler(AppError)
     def handle_invalid_usage(error):

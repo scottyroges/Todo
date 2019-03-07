@@ -2,7 +2,7 @@ import datetime
 
 from freezegun import freeze_time
 
-from app.todo.commands.get_todos import get_todos
+from app.todo.commands.get_todos import GetAllTodos
 from app.todo.domains.action import Action
 from app.todo.domains.habit.habit import Habit
 from app.todo.domains.habit.habit_buffer import HabitBufferType, HabitBuffer
@@ -51,7 +51,7 @@ def test_get_todos_all(user_request, todo_repo):
                 actions=actions)
     todo_repo.add(task)
 
-    todos = get_todos(user_id=user_request.get("user_id"), only_shows=False)
+    todos = GetAllTodos().execute(user_id=user_request.get("user_id"), only_shows=False)
     assert len(todos) == 3
 
 
@@ -86,7 +86,7 @@ def test_get_todos_show_habit(user_request, todo_repo):
                    actions=actions)
     todo_repo.add(habit2)
 
-    todos = get_todos(user_id=user_request.get("user_id"), only_shows=True)
+    todos = GetAllTodos().execute(user_id=user_request.get("user_id"), only_shows=True)
     assert len(todos) == 1
 
 
@@ -115,7 +115,7 @@ def test_get_todos_show_reoccur(user_request, todo_repo):
                        actions=actions)
     todo_repo.add(reoccur2)
 
-    todos = get_todos(user_id=user_request.get("user_id"), only_shows=True)
+    todos = GetAllTodos().execute(user_id=user_request.get("user_id"), only_shows=True)
     assert len(todos) == 1
 
 
@@ -140,5 +140,5 @@ def test_get_todos_show_task(user_request, todo_repo):
                  actions=actions)
     todo_repo.add(task2)
 
-    todos = get_todos(user_id=user_request.get("user_id"), only_shows=True)
+    todos = GetAllTodos().execute(user_id=user_request.get("user_id"), only_shows=True)
     assert len(todos) == 1

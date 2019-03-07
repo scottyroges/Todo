@@ -51,7 +51,8 @@ class Todo:
             "tags": [tag.name for tag in self.tags],
             "actions": [action.to_dict() for action in self.actions],
             "createdDate": self.created_date,
-            "modifiedDate": self.modified_date
+            "modifiedDate": self.modified_date,
+            "should_show": self.should_show
         }
 
     @property
@@ -62,3 +63,8 @@ class Todo:
         return sorted(self.actions,
                       key=lambda x: x.action_date,
                       reverse=True)[0]
+
+    @property
+    def should_show(self):
+        # should be overriden by all children
+        return True
