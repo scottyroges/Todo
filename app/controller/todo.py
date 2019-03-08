@@ -17,8 +17,8 @@ logger = logging.getLogger(__name__)
 @todo_controller.route('/todo/<todo_id>', methods=['GET'])
 @authorized
 def read(todo_id):
-    habit = GetTodo().execute(todo_id)
-    return jsonify(habit.to_dict())
+    todo = GetTodo().execute(todo_id)
+    return jsonify(todo.to_dict())
 
 
 @todo_controller.route('/todos', methods=['GET'])
