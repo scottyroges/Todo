@@ -1,3 +1,5 @@
+import logging
+
 from flask import Blueprint, jsonify
 
 from app.auth import get_request
@@ -8,6 +10,8 @@ from app.todo.commands.get_todo import GetTodo
 from app.todo.commands.get_todos import GetAllTodos
 
 todo_controller = Blueprint('todo', __name__)
+
+logger = logging.getLogger(__name__)
 
 
 @todo_controller.route('/todo/<todo_id>', methods=['GET'])

@@ -4,7 +4,7 @@ from jose import jwt, jws
 import logging
 from app.config import file_project_path, config
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 BEARER_PREFIX = "Bearer "
@@ -65,7 +65,7 @@ def _validate_jwt(token, userpool_iss, userpool_keys):
     :param userpool_keys: json with JSON Web Keys of the User Pool
     :return: True if validation succeeds; False otherwise
     """
-    log.debug("Validating token")
+    logger.debug("Validating token")
 
     # 2 Decode the token string into JWT format.
     jwt_headers = jwt.get_unverified_header(token)
@@ -108,6 +108,7 @@ def _validate_jwt(token, userpool_iss, userpool_keys):
     if exp_date < now:
         raise InvalidTokenError("Token has expired {}".format(exp_date - now))
 
+    logger.debug("Completed validating token")
     return claims
 
 
