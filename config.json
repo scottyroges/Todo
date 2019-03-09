@@ -1,13 +1,13 @@
 {
   "name": "todo",
   "cognitoRegion": "us-east-2",
-  "cognitoUserPoolId": "us-east-2_GgKNcQC1D",
+  "cognitoUserPoolId": "us-east-2_wbPLGjIsp",
   "cognitoUserPoolKeysFile": "jwks.json",
-  "cognitoClientId": "5oppr3jcs7v14pr6m6kao1msji",
-  "cognitoClientSecretKey": "clomvs1gg79rvkklsp6b7jfr2960rlcmdrtvujf40vsqa719lbg",
+  "cognitoClientId": "1ab83iaeok7aagt6aq56kmptub",
+  "cognitoClientSecretKey": "ds1s8jbumsmihbl1c8cqd6bf342mai1aai1q7bv0ikjji2kcr",
   "databaseURI": "mysql://admin:D13hARd9VU0@vader.cxx2ji8xwmsz.us-east-2.rds.amazonaws.com:3306/app",
-  "test_user_id": "96e5be3b-7718-4e5f-8dbc-2e4c4ecbd012",
+  "test_user_id": "8ccef65e-a263-4961-bb8c-5710f4ee11be",
   "test_user_password" : "!N0tR3al",
-  "test_admin_id": "0ecf211e-8784-4a13-9f82-ddf02509ee17",
+  "test_admin_id": "903b5ee4-1ffe-470e-af06-e898e0dc5381",
   "test_admin_password" : "!N0tR3alAdm1n"
 }

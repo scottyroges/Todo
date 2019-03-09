@@ -45,6 +45,8 @@ function login(username, password) {
         Pool : userPool
     };
     var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+    console.log(JSON.stringify(cognitoUser))
+    console.log(JSON.stringify(authenticationDetails))
     cognitoUser.authenticateUser(authenticationDetails, {
         onSuccess: function (result) {
             console.log('access token: ' + result.getAccessToken().getJwtToken());
@@ -59,5 +61,5 @@ function login(username, password) {
 }
 
 // createUser("srogener+admin@gmail.com", "admin_scott", "!Test123")
-login("admin_scott", "!Test123")
-// login("scottyroges", "!Test123")
+// login("admin_scott", "!Test123")
+login("scottyroges", "!Fucker1")

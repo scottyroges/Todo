@@ -2,6 +2,7 @@ from datetime import datetime
 
 import pytest
 
+from app.config import config
 from app.auth import token_decode
 from app.auth.token_decode import NoTokenError, InvalidTokenError
 from app.utils.attrdict import AttrDict
@@ -21,7 +22,7 @@ def claims_identity(mocker):
     mock_claims.return_value = {
         "token_use": "id",
         "cognito:username": "tester",
-        "iss": "https://cognito-idp.us-east-2.amazonaws.com/us-east-2_GgKNcQC1D",
+        "iss": "https://cognito-idp.us-east-2.amazonaws.com/" + config.get("cognitoUserPoolId"),
         "exp": 1546545878
     }
     return mock_claims
@@ -33,7 +34,7 @@ def claims_access(mocker):
     mock_claims.return_value = {
         "token_use": "access",
         "username": "tester",
-        "iss": "https://cognito-idp.us-east-2.amazonaws.com/us-east-2_GgKNcQC1D",
+        "iss": "https://cognito-idp.us-east-2.amazonaws.com/" + config.get("cognitoUserPoolId"),
         "exp": 1546545878
     }
     return mock_claims
