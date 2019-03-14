@@ -598,7 +598,7 @@ class TestShouldShowDayStarts:
         assert habit.should_show is False
 
     @freeze_time("2019-03-08 00:30:00")
-    def test_should_show_within_buffer_one(self):
+    def test_should_show_within_buffer_right_after_midnight(self):
         todo_owner = TodoOwner(owner_id="123")
         period = HabitPeriod(period_type=HabitPeriodType.WEEKS)
         buffer = HabitBuffer(buffer_type=HabitBufferType.DAY_START,
@@ -619,8 +619,30 @@ class TestShouldShowDayStarts:
 
         assert habit.should_show is False
 
+    @freeze_time("2019-03-08 00:30:00")
+    def test_should_show_within_buffer_right_after_midnight_action_after_midnight(self):
+        todo_owner = TodoOwner(owner_id="123")
+        period = HabitPeriod(period_type=HabitPeriodType.WEEKS)
+        buffer = HabitBuffer(buffer_type=HabitBufferType.DAY_START,
+                             amount=1)
+        # 1 day ago, within buffer
+        actions = [Action(action_date=datetime.datetime(2019, 3, 8, 0, 0, 11),
+                          points=1)]
+        habit = Habit(todo_id="abc",
+                      todo_owner=todo_owner,
+                      name="habit",
+                      description="description",
+                      points_per=1,
+                      completion_points=1,
+                      frequency=2,
+                      period=period,
+                      buffer=buffer,
+                      actions=actions)
+
+        assert habit.should_show is False
+
     @freeze_time("2019-03-08 04:30:00")
-    def test_should_show_outside_buffer_one(self):
+    def test_should_show_outside_buffer_early_morning(self):
         todo_owner = TodoOwner(owner_id="123")
         period = HabitPeriod(period_type=HabitPeriodType.WEEKS)
         buffer = HabitBuffer(buffer_type=HabitBufferType.DAY_START,
@@ -641,8 +663,30 @@ class TestShouldShowDayStarts:
 
         assert habit.should_show is True
 
+    @freeze_time("2019-03-08 04:30:00")
+    def test_should_show_outside_buffer_early_morning_action_after_midnight(self):
+        todo_owner = TodoOwner(owner_id="123")
+        period = HabitPeriod(period_type=HabitPeriodType.WEEKS)
+        buffer = HabitBuffer(buffer_type=HabitBufferType.DAY_START,
+                             amount=1)
+        # 1 day ago, within buffer
+        actions = [Action(action_date=datetime.datetime(2019, 3, 8, 0, 0, 11),
+                          points=1)]
+        habit = Habit(todo_id="abc",
+                      todo_owner=todo_owner,
+                      name="habit",
+                      description="description",
+                      points_per=1,
+                      completion_points=1,
+                      frequency=2,
+                      period=period,
+                      buffer=buffer,
+                      actions=actions)
+
+        assert habit.should_show is True
+
     @freeze_time("2019-03-08 4:30:00")
-    def test_should_show_within_buffer(self):
+    def test_should_show_within_buffer_early_morning_mutlti_day(self):
         todo_owner = TodoOwner(owner_id="123")
         period = HabitPeriod(period_type=HabitPeriodType.WEEKS)
         buffer = HabitBuffer(buffer_type=HabitBufferType.DAY_START,
@@ -664,7 +708,7 @@ class TestShouldShowDayStarts:
         assert habit.should_show is False
 
     @freeze_time("2019-03-08 4:30:00")
-    def test_should_show_outside_buffer(self):
+    def test_should_show_outside_buffer_early_morning_mutlti_day(self):
         todo_owner = TodoOwner(owner_id="123")
         period = HabitPeriod(period_type=HabitPeriodType.WEEKS)
         buffer = HabitBuffer(buffer_type=HabitBufferType.DAY_START,

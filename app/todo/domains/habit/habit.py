@@ -90,11 +90,11 @@ class Habit(Todo):
         elif self.buffer.buffer_type == HabitBufferType.DAYS:
             buffer_cutoff = last_action.action_date + datetime.timedelta(days=self.buffer.amount)
         elif self.buffer.buffer_type == HabitBufferType.DAY_START:
-            current_day_start = last_action.action_date.replace(hour=4, minute=0, second=0, microsecond=0)
-            if today < current_day_start:
-                current_day_start = current_day_start - datetime.timedelta(days=1)
+            last_action_day_start = last_action.action_date.replace(hour=4, minute=0, second=0, microsecond=0)
+            if last_action.action_date.hour < 4:
+                last_action_day_start = last_action_day_start - datetime.timedelta(days=1)
 
-            buffer_cutoff = current_day_start + datetime.timedelta(days=self.buffer.amount)
+            buffer_cutoff = last_action_day_start + datetime.timedelta(days=self.buffer.amount)
         elif self.buffer.buffer_type == HabitBufferType.WEEKS:
             buffer_cutoff = last_action.action_date + datetime.timedelta(days=self.buffer.amount * 7)
         elif self.buffer.buffer_type == HabitBufferType.MONTHS:
