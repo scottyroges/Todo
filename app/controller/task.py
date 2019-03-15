@@ -13,17 +13,17 @@ task_controller = Blueprint('task', __name__)
 @task_controller.route('/task', methods=['POST'])
 @authorized
 def create():
-    reoccur_data = json.loads(request.data)
+    task_data = json.loads(request.data)
 
-    if not reoccur_data.get("todoOwnerId"):
-        reoccur_data["todoOwnerId"] = request.user_id
+    if not task_data.get("todoOwnerId"):
+        task_data["todoOwnerId"] = request.user_id
 
-    reoccur = AddTodo().execute(reoccur_data, TodoType.TASK)
-    return jsonify(reoccur.to_dict())
+    task = AddTodo().execute(task_data, TodoType.TASK)
+    return jsonify(task.to_dict())
 
 
 @task_controller.route('/task/<todo_id>', methods=['GET'])
 @authorized
 def read(todo_id):
-    reoccur = GetTodo().execute(todo_id)
-    return jsonify(reoccur.to_dict())
+    task = GetTodo().execute(todo_id)
+    return jsonify(task.to_dict())
