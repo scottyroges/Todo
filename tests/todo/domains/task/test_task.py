@@ -41,7 +41,7 @@ def test_to_dict():
             "actionDate": datetime.datetime(2019, 2, 24, 10, 0, 4),
             "points": 2
         }],
-        "should_show": False
+        "shouldShow": False
     }
 
 

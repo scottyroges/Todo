@@ -52,7 +52,7 @@ class Todo:
             "actions": [action.to_dict() for action in self.actions],
             "createdDate": self.created_date,
             "modifiedDate": self.modified_date,
-            "should_show": self.should_show
+            "shouldShow": self.should_show
         }
 
     @property
