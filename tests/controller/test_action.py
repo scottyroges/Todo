@@ -23,7 +23,6 @@ class TestPerformActionHabit:
             'amount': 1,
             'bufferType': 'DAY_START'
         }
-        categories = [CategoryRecord(name="test"), CategoryRecord(name="again")]
         tags = [TagRecord(name="who"), TagRecord(name="knows")]
         habit_record = HabitRecord(todo_id="abc",
                                    todo_owner_id=user_id,
@@ -35,7 +34,7 @@ class TestPerformActionHabit:
                                    frequency=1,
                                    period=period,
                                    buffer=buffer,
-                                   categories=categories,
+                                   category=CategoryRecord(id="abc", name="test", color="#FFF"),
                                    tags=tags,
                                    created_date=datetime.datetime(2019, 2, 24),
                                    modified_date=datetime.datetime(2019, 2, 24))
@@ -71,14 +70,14 @@ class TestPerformActionHabit:
         assert create_data["frequency"] == 1
         assert create_data["period"] == {'amount': 1, 'periodType': 'WEEKS'}
         assert create_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
-        assert sorted(create_data["categories"]) == sorted(["test", "again"])
+        assert create_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
         assert sorted(create_data["tags"]) == sorted(["who", "knows"])
         assert create_data["actions"] == [{'actionDate': 'Thu, 21 Feb 2019 12:02:05 GMT', 'points': '1'}]
         assert create_data["createdDate"] is not None
         assert create_data["modifiedDate"] is not None
 
         action_record = (session.query(ActionRecord)
-                         .filter(ActionRecord.todo_id == habit_record.todo_id)[0])
+            .filter(ActionRecord.todo_id == habit_record.todo_id)[0])
         assert action_record is not None
         assert action_record.id is not None
         assert action_record.todo_id == habit_record.todo_id
@@ -132,7 +131,7 @@ class TestPerformActionHabit:
         assert create_data["frequency"] == 1
         assert create_data["period"] == {'amount': 1, 'periodType': 'WEEKS'}
         assert create_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
-        assert sorted(create_data["categories"]) == sorted(["test", "again"])
+        assert create_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
         assert sorted(create_data["tags"]) == sorted(["who", "knows"])
         assert create_data["actions"] == [{'actionDate': 'Thu, 21 Feb 2019 12:02:05 GMT', 'points': '1'}]
         assert create_data["createdDate"] is not None
@@ -153,7 +152,6 @@ class TestPerformActionReoccur:
             'when': ["Sunday"],
             'repeatType': 'DAY_OF_WEEK'
         }
-        categories = [CategoryRecord(name="test"), CategoryRecord(name="again")]
         tags = [TagRecord(name="who"), TagRecord(name="knows")]
         reoccur_record = ReoccurRecord(todo_id="abc",
                                        todo_owner_id=user_id,
@@ -163,7 +161,7 @@ class TestPerformActionReoccur:
                                        completion_points=1,
                                        required=False,
                                        repeat=repeat,
-                                       categories=categories,
+                                       category=CategoryRecord(id="abc", name="test", color="#FFF"),
                                        tags=tags,
                                        created_date=datetime.datetime(2019, 2, 24),
                                        modified_date=datetime.datetime(2019, 2, 24))
@@ -197,14 +195,14 @@ class TestPerformActionReoccur:
         assert create_data["completionPoints"] == 1
         assert create_data["repeat"] == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
         assert create_data["required"] is False
-        assert sorted(create_data["categories"]) == sorted(["test", "again"])
+        assert create_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
         assert sorted(create_data["tags"]) == sorted(["who", "knows"])
         assert create_data["actions"] == [{'actionDate': 'Thu, 21 Feb 2019 12:02:05 GMT', 'points': '1'}]
         assert create_data["createdDate"] is not None
         assert create_data["modifiedDate"] is not None
 
         action_record = (session.query(ActionRecord)
-                         .filter(ActionRecord.todo_id == reoccur_record.todo_id)[0])
+            .filter(ActionRecord.todo_id == reoccur_record.todo_id)[0])
         assert action_record is not None
         assert action_record.id is not None
         assert action_record.todo_id == reoccur_record.todo_id
@@ -256,7 +254,7 @@ class TestPerformActionReoccur:
         assert create_data["completionPoints"] == 1
         assert create_data["required"] is False
         assert create_data["repeat"] == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
-        assert sorted(create_data["categories"]) == sorted(["test", "again"])
+        assert create_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
         assert sorted(create_data["tags"]) == sorted(["who", "knows"])
         assert create_data["actions"] == [{'actionDate': 'Thu, 21 Feb 2019 12:02:05 GMT', 'points': '1'}]
         assert create_data["createdDate"] is not None

@@ -20,9 +20,11 @@ class ReoccurTransformer:
             "when": reoccur.repeat.when
         }
 
-        categories = [CategoryRecord(id=category.category_id,
-                                     name=category.name)
-                      for category in reoccur.categories]
+        category = CategoryRecord(
+            id=reoccur.category.category_id,
+            name=reoccur.category.name,
+            color=reoccur.category.color
+        )
 
         tags = [TagRecord(id=tag.tag_id,
                           name=tag.name)
@@ -41,7 +43,7 @@ class ReoccurTransformer:
                              completion_points=reoccur.completion_points,
                              repeat=repeat,
                              required=reoccur.required,
-                             categories=categories,
+                             category=category,
                              tags=tags,
                              actions=actions,
                              created_date=reoccur.created_date,
@@ -52,9 +54,10 @@ class ReoccurTransformer:
         todo_owner = TodoOwner(owner_id=reoccur_record.todo_owner_id)
         repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType[reoccur_record.repeat.get("repeatType")],
                                when=reoccur_record.repeat.get("when"))
-        categories = [DomainCategory(category_id=category.id,
-                                     name=category.name)
-                      for category in reoccur_record.categories]
+        category = DomainCategory(category_id=reoccur_record.category.id,
+                                  name=reoccur_record.category.name,
+                                  color=reoccur_record.category.color)
+
         tags = [DomainTag(tag_id=tag.id,
                           name=tag.name)
                 for tag in reoccur_record.tags]
@@ -70,7 +73,7 @@ class ReoccurTransformer:
                              completion_points=reoccur_record.completion_points,
                              repeat=repeat,
                              required=reoccur_record.required,
-                             categories=categories,
+                             category=category,
                              tags=tags,
                              actions=actions,
                              created_date=reoccur_record.created_date,

@@ -14,6 +14,12 @@ from app.model import (
 from app.todo.domains.todo_type import TodoType
 
 
+def _create_category_record():
+    return CategoryRecord(id="abc",
+                          name="test",
+                          color="#FFF")
+
+
 def _create_habit_record(todo_id="abc", user_id="123"):
     period = {
         'amount': 1,
@@ -24,7 +30,6 @@ def _create_habit_record(todo_id="abc", user_id="123"):
         'amount': 1,
         'bufferType': 'DAY_START'
     }
-    categories = [CategoryRecord(name="test"), CategoryRecord(name="again")]
     tags = [TagRecord(name="who"), TagRecord(name="knows")]
     actions = [ActionRecord(action_date=datetime.datetime(2019, 2, 24),
                             points=1)]
@@ -38,7 +43,7 @@ def _create_habit_record(todo_id="abc", user_id="123"):
                                frequency=1,
                                period=period,
                                buffer=buffer,
-                               categories=categories,
+                               category_id="abc",
                                tags=tags,
                                actions=actions,
                                created_date=datetime.datetime(2019, 2, 24),
@@ -49,6 +54,8 @@ def _create_habit_record(todo_id="abc", user_id="123"):
 class TestReadHabit:
     @pytest.mark.integration
     def test_habit_read(self, client, session, test_user):
+        category_record = _create_category_record()
+        session.add(category_record)
         habit_record = _create_habit_record(user_id=test_user.get("user_id"))
         session.add(habit_record)
         session.commit()
@@ -70,7 +77,7 @@ class TestReadHabit:
         assert fetch_data["frequency"] == habit_record.frequency
         assert fetch_data["period"] == {'amount': 1, 'periodType': 'WEEKS'}
         assert fetch_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
-        assert sorted(fetch_data["categories"]) == sorted(["test", "again"])
+        assert fetch_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
         assert sorted(fetch_data["tags"]) == sorted(["who", "knows"])
         assert fetch_data["actions"] == [{'actionDate': 'Sun, 24 Feb 2019 00:00:00 GMT', "points": 1}]
         assert fetch_data["createdDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"
@@ -78,6 +85,8 @@ class TestReadHabit:
 
     @pytest.mark.integration
     def test_habit_read_unauthorized(self, client, session, test_user):
+        category_record = _create_category_record()
+        session.add(category_record)
         habit_record = _create_habit_record(user_id="123")
         session.add(habit_record)
         session.commit()
@@ -88,6 +97,8 @@ class TestReadHabit:
 
     @pytest.mark.integration
     def test_habit_read_admin(self, client, session, test_admin):
+        category_record = _create_category_record()
+        session.add(category_record)
         habit_record = _create_habit_record(user_id="123")
         session.add(habit_record)
         session.commit()
@@ -109,7 +120,7 @@ class TestReadHabit:
         assert fetch_data["frequency"] == habit_record.frequency
         assert fetch_data["period"] == {'amount': 1, 'periodType': 'WEEKS'}
         assert fetch_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
-        assert sorted(fetch_data["categories"]) == sorted(["test", "again"])
+        assert fetch_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
         assert sorted(fetch_data["tags"]) == sorted(["who", "knows"])
         assert fetch_data["actions"] == [{'actionDate': 'Sun, 24 Feb 2019 00:00:00 GMT', "points": 1}]
         assert fetch_data["createdDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"
@@ -128,7 +139,6 @@ def _create_reoccur_record(todo_id="abc", user_id="123"):
         'when': ["Sunday"],
         'repeatType': 'DAY_OF_WEEK'
     }
-    categories = [CategoryRecord(name="test"), CategoryRecord(name="again")]
     tags = [TagRecord(name="who"), TagRecord(name="knows")]
     actions = [ActionRecord(action_date=datetime.datetime(2019, 2, 24),
                             points=1)]
@@ -140,7 +150,7 @@ def _create_reoccur_record(todo_id="abc", user_id="123"):
                                    completion_points=1,
                                    required=False,
                                    repeat=repeat,
-                                   categories=categories,
+                                   category_id="abc",
                                    tags=tags,
                                    actions=actions,
                                    created_date=datetime.datetime(2019, 2, 24),
@@ -151,6 +161,8 @@ def _create_reoccur_record(todo_id="abc", user_id="123"):
 class TestReadReoccur:
     @pytest.mark.integration
     def test_reoccur_read(self, client, session, test_user):
+        category_record = _create_category_record()
+        session.add(category_record)
         reoccur_record = _create_reoccur_record(user_id=test_user.get("user_id"))
         session.add(reoccur_record)
         session.commit()
@@ -170,7 +182,7 @@ class TestReadReoccur:
         assert fetch_data["completionPoints"] == reoccur_record.completion_points
         assert fetch_data["required"] == reoccur_record.required
         assert fetch_data["repeat"] == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
-        assert sorted(fetch_data["categories"]) == sorted(["test", "again"])
+        assert fetch_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
         assert sorted(fetch_data["tags"]) == sorted(["who", "knows"])
         assert fetch_data["actions"] == [{'actionDate': 'Sun, 24 Feb 2019 00:00:00 GMT', "points": 1}]
         assert fetch_data["createdDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"
@@ -178,6 +190,8 @@ class TestReadReoccur:
 
     @pytest.mark.integration
     def test_reoccur_read_unauthorized(self, client, session, test_user):
+        category_record = _create_category_record()
+        session.add(category_record)
         reoccur_record = _create_reoccur_record(user_id="123")
         session.add(reoccur_record)
         session.commit()
@@ -188,6 +202,8 @@ class TestReadReoccur:
 
     @pytest.mark.integration
     def test_reoccur_read_admin(self, client, session, test_admin):
+        category_record = _create_category_record()
+        session.add(category_record)
         reoccur_record = _create_reoccur_record(user_id="123")
         session.add(reoccur_record)
         session.commit()
@@ -207,7 +223,7 @@ class TestReadReoccur:
         assert fetch_data["completionPoints"] == reoccur_record.completion_points
         assert fetch_data["required"] == reoccur_record.required
         assert fetch_data["repeat"] == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
-        assert sorted(fetch_data["categories"]) == sorted(["test", "again"])
+        assert fetch_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
         assert sorted(fetch_data["tags"]) == sorted(["who", "knows"])
         assert fetch_data["actions"] == [{'actionDate': 'Sun, 24 Feb 2019 00:00:00 GMT', "points": 1}]
         assert fetch_data["createdDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"
@@ -222,7 +238,6 @@ class TestReadReoccur:
 
 
 def _create_task_record(todo_id="abc", user_id="123"):
-    categories = [CategoryRecord(name="test"), CategoryRecord(name="again")]
     tags = [TagRecord(name="who"), TagRecord(name="knows")]
     actions = [ActionRecord(action_date=datetime.datetime(2019, 2, 24),
                             points=1)]
@@ -233,16 +248,19 @@ def _create_task_record(todo_id="abc", user_id="123"):
                              todo_type=TodoType.TASK,
                              completion_points=1,
                              due_date=datetime.datetime(2019, 3, 2),
-                             categories=categories,
+                             category_id="abc",
                              tags=tags,
                              actions=actions,
                              created_date=datetime.datetime(2019, 2, 24),
                              modified_date=datetime.datetime(2019, 2, 24))
     return task_record
 
+
 class TestReadTask:
     @pytest.mark.integration
     def test_task_read(self, client, session, test_user):
+        category_record = _create_category_record()
+        session.add(category_record)
         task_record = _create_task_record(user_id=test_user.get("user_id"))
         session.add(task_record)
         session.commit()
@@ -261,7 +279,7 @@ class TestReadTask:
         assert fetch_data["todoType"] == task_record.todo_type.name
         assert fetch_data["completionPoints"] == task_record.completion_points
         assert fetch_data["dueDate"] == "Sat, 02 Mar 2019 00:00:00 GMT"
-        assert sorted(fetch_data["categories"]) == sorted(["test", "again"])
+        assert fetch_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
         assert sorted(fetch_data["tags"]) == sorted(["who", "knows"])
         assert fetch_data["actions"] == [{'actionDate': 'Sun, 24 Feb 2019 00:00:00 GMT', "points": 1}]
         assert fetch_data["createdDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"
@@ -269,6 +287,8 @@ class TestReadTask:
 
     @pytest.mark.integration
     def test_task_read_unauthorized(self, client, session, test_user):
+        category_record = _create_category_record()
+        session.add(category_record)
         task_record = _create_task_record(user_id="123")
         session.add(task_record)
         session.commit()
@@ -279,6 +299,8 @@ class TestReadTask:
 
     @pytest.mark.integration
     def test_task_read_admin(self, client, session, test_admin):
+        category_record = _create_category_record()
+        session.add(category_record)
         task_record = _create_task_record(user_id="123")
         session.add(task_record)
         session.commit()
@@ -297,7 +319,7 @@ class TestReadTask:
         assert fetch_data["todoType"] == task_record.todo_type.name
         assert fetch_data["completionPoints"] == task_record.completion_points
         assert fetch_data["dueDate"] == "Sat, 02 Mar 2019 00:00:00 GMT"
-        assert sorted(fetch_data["categories"]) == sorted(["test", "again"])
+        assert fetch_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
         assert sorted(fetch_data["tags"]) == sorted(["who", "knows"])
         assert fetch_data["actions"] == [{'actionDate': 'Sun, 24 Feb 2019 00:00:00 GMT', "points": 1}]
         assert fetch_data["createdDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"
@@ -314,6 +336,8 @@ class TestReadTask:
 class TestGetAll:
     @pytest.mark.integration
     def test_todo_get_all(self, client, session, test_user):
+        category_record = _create_category_record()
+        session.add(category_record)
         habit1 = _create_habit_record(user_id=test_user.get("user_id"))
         session.add(habit1)
         habit2 = _create_habit_record(todo_id="def", user_id="123")
@@ -333,6 +357,8 @@ class TestGetAll:
 
     @pytest.mark.integration
     def test_todo_get_all_user_id_non_admin(self, client, session, test_user):
+        category_record = _create_category_record()
+        session.add(category_record)
         habit1 = _create_habit_record(user_id=test_user.get("user_id"))
         session.add(habit1)
         habit2 = _create_habit_record(todo_id="def", user_id="123")
@@ -348,6 +374,8 @@ class TestGetAll:
 
     @pytest.mark.integration
     def test_todo_get_all_user_id_non_admin(self, client, session, test_admin):
+        category_record = _create_category_record()
+        session.add(category_record)
         habit1 = _create_habit_record(user_id="456")
         session.add(habit1)
         habit2 = _create_habit_record(todo_id="def", user_id="123")
@@ -364,4 +392,3 @@ class TestGetAll:
         fetch_data = json.loads(fetch_resp.data.decode('utf-8'))
 
         assert len(fetch_data) == 2
-

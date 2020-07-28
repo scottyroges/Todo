@@ -18,7 +18,6 @@ def test_to_dict():
                          amount=1)
     buffer = HabitBuffer(buffer_type=HabitBufferType.DAY_START,
                          amount=1)
-    categories = [Category(name="test"), Category(name="again")]
     tags = [Tag(name="who"), Tag(name="knows")]
     actions = [Action(points=2)]
     habit = Habit(todo_id="abc",
@@ -30,7 +29,9 @@ def test_to_dict():
                   frequency=1,
                   period=period,
                   buffer=buffer,
-                  categories=categories,
+                  category=Category(category_id="abc",
+                                    name="test",
+                                    color="#FFF"),
                   tags=tags,
                   actions=actions)
 
@@ -51,7 +52,11 @@ def test_to_dict():
             "bufferType": "DAY_START",
             "amount": 1,
         },
-        "categories": ["test", "again"],
+        "category": {
+            "id": "abc",
+            "name": "test",
+            "color": "#FFF"
+        },
         "tags": ["who", "knows"],
         "createdDate": datetime.datetime(2019, 2, 24, 10, 0, 4),
         "modifiedDate": datetime.datetime(2019, 2, 24, 10, 0, 4),
@@ -1038,4 +1043,3 @@ class TestShouldShowMonths:
                       actions=actions)
 
         assert habit.should_show is True
-

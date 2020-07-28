@@ -24,7 +24,6 @@ class TestGetTodoHabit:
                              amount=1)
         buffer = HabitBuffer(buffer_type=HabitBufferType.DAY_START,
                              amount=1)
-        categories = [Category(name="test"), Category(name="again")]
         tags = [Tag(name="who"), Tag(name="knows")]
         actions = [Action()]
         habit = Habit(todo_id="abc",
@@ -36,7 +35,9 @@ class TestGetTodoHabit:
                       frequency=1,
                       period=period,
                       buffer=buffer,
-                      categories=categories,
+                      category=Category(category_id="abc",
+                                        name="test",
+                                        color="#FFF"),
                       tags=tags,
                       actions=actions)
         return habit
@@ -69,7 +70,6 @@ class TestGetTodoReoccur:
         todo_owner = TodoOwner(owner_id="123")
         repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_WEEK,
                                when=["Sunday"])
-        categories = [Category(name="test"), Category(name="again")]
         tags = [Tag(name="who"), Tag(name="knows")]
         actions = [Action()]
         reoccur = Reoccur(todo_id="abc",
@@ -79,7 +79,9 @@ class TestGetTodoReoccur:
                           completion_points=1,
                           required=False,
                           repeat=repeat,
-                          categories=categories,
+                          category=Category(category_id="abc",
+                                            name="test",
+                                            color="#FFF"),
                           tags=tags,
                           actions=actions)
         return reoccur
@@ -110,7 +112,6 @@ class TestGetTodoReoccur:
 class TestGetTodoTask:
     def _create_task(self):
         todo_owner = TodoOwner(owner_id="123")
-        categories = [Category(name="test"), Category(name="again")]
         tags = [Tag(name="who"), Tag(name="knows")]
         actions = [Action()]
         task = Task(todo_id="abc",
@@ -119,7 +120,9 @@ class TestGetTodoTask:
                     description="description",
                     completion_points=1,
                     due_date=datetime.datetime(2019, 3, 3, 0, 25, 5),
-                    categories=categories,
+                    category=Category(category_id="abc",
+                                      name="test",
+                                      color="#FFF"),
                     tags=tags,
                     actions=actions)
         return task

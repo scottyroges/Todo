@@ -15,9 +15,11 @@ from app.todo.domains.todo_owner import TodoOwner
 class TaskTransformer:
     @classmethod
     def to_record(cls, task: DomainTask):
-        categories = [CategoryRecord(id=category.category_id,
-                                     name=category.name)
-                      for category in task.categories]
+        category = CategoryRecord(
+            id=task.category.category_id,
+            name=task.category.name,
+            color=task.category.color
+        )
 
         tags = [TagRecord(id=tag.tag_id,
                           name=tag.name)
@@ -35,7 +37,7 @@ class TaskTransformer:
                           todo_type=task.todo_type,
                           completion_points=task.completion_points,
                           due_date=task.due_date,
-                          categories=categories,
+                          category=category,
                           tags=tags,
                           actions=actions,
                           created_date=task.created_date,
@@ -44,9 +46,9 @@ class TaskTransformer:
     @classmethod
     def from_record(cls, task_record: TaskRecord):
         todo_owner = TodoOwner(owner_id=task_record.todo_owner_id)
-        categories = [DomainCategory(category_id=category.id,
-                                     name=category.name)
-                      for category in task_record.categories]
+        category = DomainCategory(category_id=task_record.category.id,
+                                  name=task_record.category.name,
+                                  color=task_record.category.color)
         tags = [DomainTag(tag_id=tag.id,
                           name=tag.name)
                 for tag in task_record.tags]
@@ -61,7 +63,7 @@ class TaskTransformer:
                           description=task_record.description,
                           completion_points=task_record.completion_points,
                           due_date=task_record.due_date,
-                          categories=categories,
+                          category=category,
                           tags=tags,
                           actions=actions,
                           created_date=task_record.created_date,

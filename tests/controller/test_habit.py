@@ -27,7 +27,11 @@ def test_habit_create(client, session, test_user):
             "periodType": "WEEKS",
             "amount": 1
         },
-        "categories": ["test", "again"],
+        "category": {
+            "id": "abc",
+            "name": "test",
+            "color": "#FFF"
+        },
         "tags": ["who", "knows"]
     }
     data = json.dumps(todo_data)
@@ -48,7 +52,7 @@ def test_habit_create(client, session, test_user):
     assert create_data["frequency"] == todo_data["frequency"]
     assert create_data["period"] == {'amount': 1, 'periodType': 'WEEKS'}
     assert create_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
-    assert sorted(create_data["categories"]) == sorted(["test", "again"])
+    assert create_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
     assert sorted(create_data["tags"]) == sorted(["who", "knows"])
     assert create_data["actions"] == []
     assert create_data["createdDate"] is not None
@@ -67,9 +71,9 @@ def test_habit_create(client, session, test_user):
     assert habit_record.frequency == todo_data["frequency"]
     assert habit_record.period == {'amount': 1, 'periodType': 'WEEKS'}
     assert habit_record.buffer == {'amount': 1, 'bufferType': 'DAY_START'}
-    assert len(habit_record.categories) == 2
-    for category in habit_record.categories:
-        assert category.name in ["test", "again"]
+    assert habit_record.category.id == "abc"
+    assert habit_record.category.name == "test"
+    assert habit_record.category.color == "#FFF"
     assert len(habit_record.tags) == 2
     for tag in habit_record.tags:
         assert tag.name in ["who", "knows"]
@@ -95,7 +99,11 @@ def test_habit_create_unauthorized(client, session, test_user):
             "periodType": "WEEKS",
             "amount": 1
         },
-        "categories": ["test", "again"],
+        "category": {
+            "id": "abc",
+            "name": "test",
+            "color": "#FFF"
+        },
         "tags": ["who", "knows"]
     }
     data = json.dumps(todo_data)
@@ -122,7 +130,11 @@ def test_habit_create_admin(client, session, test_admin):
             "periodType": "WEEKS",
             "amount": 1
         },
-        "categories": ["test", "again"],
+        "category": {
+            "id": "abc",
+            "name": "test",
+            "color": "#FFF"
+        },
         "tags": ["who", "knows"]
     }
     data = json.dumps(todo_data)
@@ -143,7 +155,7 @@ def test_habit_create_admin(client, session, test_admin):
     assert create_data["completionPoints"] == todo_data["completionPoints"]
     assert create_data["period"] == {'amount': 1, 'periodType': 'WEEKS'}
     assert create_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
-    assert sorted(create_data["categories"]) == sorted(["test", "again"])
+    assert create_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
     assert sorted(create_data["tags"]) == sorted(["who", "knows"])
     assert create_data["actions"] == []
     assert create_data["createdDate"] is not None
@@ -162,9 +174,9 @@ def test_habit_create_admin(client, session, test_admin):
     assert habit_record.frequency == todo_data["frequency"]
     assert habit_record.period == {'amount': 1, 'periodType': 'WEEKS'}
     assert habit_record.buffer == {'amount': 1, 'bufferType': 'DAY_START'}
-    assert len(habit_record.categories) == 2
-    for category in habit_record.categories:
-        assert category.name in ["test", "again"]
+    assert habit_record.category.id == "abc"
+    assert habit_record.category.name == "test"
+    assert habit_record.category.color == "#FFF"
     assert len(habit_record.tags) == 2
     for tag in habit_record.tags:
         assert tag.name in ["who", "knows"]
@@ -183,7 +195,6 @@ def _create_habit_record(user_id):
         'amount': 1,
         'bufferType': 'DAY_START'
     }
-    categories = [CategoryRecord(name="test"), CategoryRecord(name="again")]
     tags = [TagRecord(name="who"), TagRecord(name="knows")]
     actions = [ActionRecord(action_date=datetime.datetime(2019, 2, 24),
                             points=1)]
@@ -197,7 +208,9 @@ def _create_habit_record(user_id):
                                frequency=1,
                                period=period,
                                buffer=buffer,
-                               categories=categories,
+                               category=CategoryRecord(id="abc",
+                                                       name="test",
+                                                       color="#FFF"),
                                tags=tags,
                                actions=actions,
                                created_date=datetime.datetime(2019, 2, 24),
@@ -228,7 +241,7 @@ def test_habit_read(client, session, test_user):
     assert fetch_data["frequency"] == habit_record.frequency
     assert fetch_data["period"] == {'amount': 1, 'periodType': 'WEEKS'}
     assert fetch_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
-    assert sorted(fetch_data["categories"]) == sorted(["test", "again"])
+    assert fetch_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
     assert sorted(fetch_data["tags"]) == sorted(["who", "knows"])
     assert fetch_data["actions"] == [{'actionDate': 'Sun, 24 Feb 2019 00:00:00 GMT', "points": 1}]
     assert fetch_data["createdDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"
@@ -269,7 +282,7 @@ def test_habit_read_admin(client, session, test_admin):
     assert fetch_data["frequency"] == habit_record.frequency
     assert fetch_data["period"] == {'amount': 1, 'periodType': 'WEEKS'}
     assert fetch_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
-    assert sorted(fetch_data["categories"]) == sorted(["test", "again"])
+    assert fetch_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
     assert sorted(fetch_data["tags"]) == sorted(["who", "knows"])
     assert fetch_data["actions"] == [{'actionDate': 'Sun, 24 Feb 2019 00:00:00 GMT', "points": 1}]
     assert fetch_data["createdDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"

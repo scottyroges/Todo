@@ -28,7 +28,11 @@ class TestAddTodoHabit:
                 "periodType": "WEEKS",
                 "amount": 1
             },
-            "categories": ["test", "again"],
+            "category": {
+                "id": "abc",
+                "name": "test",
+                "color": "#FFF"
+            },
             "tags": ["who", "knows"]
         }
         todo_type = TodoType.HABIT
@@ -46,8 +50,9 @@ class TestAddTodoHabit:
         assert todo.buffer.amount == 1
         assert todo.period.period_type == HabitPeriodType.WEEKS
         assert todo.period.amount == 1
-        for category in todo.categories:
-            assert category.name in ["test", "again"]
+        assert todo.category.category_id == "abc"
+        assert todo.category.name == "test"
+        assert todo.category.color == "#FFF"
         for tag in todo.tags:
             assert tag.name in ["who", "knows"]
         assert todo.actions == []
@@ -70,7 +75,11 @@ class TestAddTodoHabit:
                 "periodType": "WEEKS",
                 "amount": 1
             },
-            "categories": ["test", "again"],
+            "category": {
+                "id": "abc",
+                "name": "test",
+                "color": "#FFF"
+            },
             "tags": ["who", "knows"]
         }
 
@@ -92,7 +101,11 @@ class TestAddTodoReoccur:
                 "repeatType": "DAY_OF_WEEK",
                 "when": ["Sunday"]
             },
-            "categories": ["test", "again"],
+            "category": {
+                "id": "abc",
+                "name": "test",
+                "color": "#FFF"
+            },
             "tags": ["who", "knows"]
         }
         todo_type = TodoType.REOCCUR
@@ -107,8 +120,9 @@ class TestAddTodoReoccur:
         assert todo.required is False
         assert todo.repeat.repeat_type == ReoccurRepeatType.DAY_OF_WEEK
         assert todo.repeat.when == ["Sunday"]
-        for category in todo.categories:
-            assert category.name in ["test", "again"]
+        assert todo.category.category_id == "abc"
+        assert todo.category.name == "test"
+        assert todo.category.color == "#FFF"
         for tag in todo.tags:
             assert tag.name in ["who", "knows"]
         assert todo.actions == []
@@ -126,7 +140,11 @@ class TestAddTodoReoccur:
                 "repeatType": "DAY_OF_WEEK",
                 "when": ["Sunday"]
             },
-            "categories": ["test", "again"],
+            "category": {
+                "id": "abc",
+                "name": "test",
+                "color": "#FFF"
+            },
             "tags": ["who", "knows"]
         }
 
@@ -144,7 +162,11 @@ class TestAddTodoTask:
             "description": "description",
             "completionPoints": 1,
             "dueDate": "2019-03-03 00:20:05",
-            "categories": ["test", "again"],
+            "category": {
+                "id": "abc",
+                "name": "test",
+                "color": "#FFF"
+            },
             "tags": ["who", "knows"]
         }
         todo_type = TodoType.TASK
@@ -157,8 +179,9 @@ class TestAddTodoTask:
         assert todo.todo_type == TodoType.TASK
         assert todo.completion_points == 1
         assert todo.due_date == datetime.datetime(2019, 3, 3, 0, 20, 5)
-        for category in todo.categories:
-            assert category.name in ["test", "again"]
+        assert todo.category.category_id == "abc"
+        assert todo.category.name == "test"
+        assert todo.category.color == "#FFF"
         for tag in todo.tags:
             assert tag.name in ["who", "knows"]
         assert todo.actions == []
@@ -172,7 +195,11 @@ class TestAddTodoTask:
             "description": "description",
             "completionPoints": 1,
             "dueDate": "2019-03-03 00:20:05",
-            "categories": ["test", "again"],
+            "category": {
+                "id": "abc",
+                "name": "test",
+                "color": "#FFF"
+            },
             "tags": ["who", "knows"]
         }
 

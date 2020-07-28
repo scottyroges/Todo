@@ -22,7 +22,6 @@ def test_to_record():
     todo_owner = TodoOwner(owner_id="123")
     repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_WEEK,
                            when=["Sunday"])
-    categories = [DomainCategory(name="test"), DomainCategory(name="again")]
     tags = [DomainTag(name="who"), DomainTag(name="knows")]
     actions = [DomainAction()]
     reoccur = DomainReoccur(todo_id="abc",
@@ -32,7 +31,9 @@ def test_to_record():
                             completion_points=1,
                             required=False,
                             repeat=repeat,
-                            categories=categories,
+                            category=DomainCategory(category_id="abc",
+                                                    name="test",
+                                                    color="#FFF"),
                             tags=tags,
                             actions=actions)
 
@@ -48,9 +49,9 @@ def test_to_record():
         'when': ["Sunday"],
         'repeatType': 'DAY_OF_WEEK'
     }
-    for category_record in reoccur_record.categories:
-        category = filter(lambda x: x.name == category_record.name, reoccur.categories)
-        assert category is not None
+    assert reoccur_record.category.id == "abc"
+    assert reoccur_record.category.name == "test"
+    assert reoccur_record.category.color == "#FFF"
     for tag_record in reoccur_record.tags:
         tag = filter(lambda x: x.name == tag_record.name, reoccur.tags)
         assert tag is not None
@@ -65,7 +66,6 @@ def test_from_record():
         'when': ["Sunday"],
         'repeatType': 'DAY_OF_WEEK'
     }
-    categories = [CategoryRecord(name="test"), CategoryRecord(name="again")]
     tags = [TagRecord(name="who"), TagRecord(name="knows")]
     actions = [ActionRecord(action_date=datetime.datetime(2019, 2, 24),
                             points=1)]
@@ -77,7 +77,9 @@ def test_from_record():
                                    completion_points=1,
                                    required=False,
                                    repeat=repeat,
-                                   categories=categories,
+                                   category=CategoryRecord(id="abc",
+                                                           name="test",
+                                                           color="#FFF"),
                                    tags=tags,
                                    actions=actions,
                                    created_date=datetime.datetime(2019, 2, 24),
@@ -93,9 +95,9 @@ def test_from_record():
     assert reoccur.required == reoccur_record.required
     assert reoccur.repeat.when == ["Sunday"]
     assert reoccur.repeat.repeat_type == ReoccurRepeatType.DAY_OF_WEEK
-    for category in reoccur.categories:
-        category_record = filter(lambda x: x.name == category.name, reoccur_record.categories)
-        assert category_record is not None
+    assert reoccur.category.category_id == "abc"
+    assert reoccur.category.name == "test"
+    assert reoccur_record.category.color == "#FFF"
     for tag in reoccur.tags:
         tag_record = filter(lambda x: x.name == tag.name, reoccur_record.tags)
         assert tag_record is not None

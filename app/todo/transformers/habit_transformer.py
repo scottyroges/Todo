@@ -26,9 +26,11 @@ class HabitTransformer:
             "amount": habit.buffer.amount
         }
 
-        categories = [CategoryRecord(id=category.category_id,
-                                     name=category.name)
-                      for category in habit.categories]
+        category = CategoryRecord(
+            id=habit.category.category_id,
+            name=habit.category.name,
+            color=habit.category.color
+        )
 
         tags = [TagRecord(id=tag.tag_id,
                           name=tag.name)
@@ -49,7 +51,7 @@ class HabitTransformer:
                            frequency=habit.frequency,
                            period=period,
                            buffer=buffer,
-                           categories=categories,
+                           category=category,
                            tags=tags,
                            actions=actions,
                            created_date=habit.created_date,
@@ -62,9 +64,10 @@ class HabitTransformer:
                              amount=habit_record.period.get("amount"))
         buffer = HabitBuffer(buffer_type=HabitBufferType[habit_record.buffer.get("bufferType")],
                              amount=habit_record.buffer.get("amount"))
-        categories = [DomainCategory(category_id=category.id,
-                                     name=category.name)
-                      for category in habit_record.categories]
+        category = DomainCategory(category_id=habit_record.category.id,
+                                  name=habit_record.category.name,
+                                  color=habit_record.category.color)
+
         tags = [DomainTag(tag_id=tag.id,
                           name=tag.name)
                 for tag in habit_record.tags]
@@ -82,7 +85,7 @@ class HabitTransformer:
                            frequency=habit_record.frequency,
                            period=period,
                            buffer=buffer,
-                           categories=categories,
+                           category=category,
                            tags=tags,
                            actions=actions,
                            created_date=habit_record.created_date,

@@ -12,7 +12,6 @@ from app.todo.domains.todo_owner import TodoOwner
 @freeze_time("2019-02-24 10:00:04")
 def test_to_dict():
     todo_owner = TodoOwner(owner_id="123")
-    categories = [Category(name="test"), Category(name="again")]
     tags = [Tag(name="who"), Tag(name="knows")]
     actions = [Action(points=2)]
     task = Task(todo_id="abc",
@@ -21,7 +20,9 @@ def test_to_dict():
                 description="description",
                 completion_points=1,
                 due_date=datetime.datetime(2019, 3, 2, 11, 32, 5),
-                categories=categories,
+                category=Category(category_id="abc",
+                                  name="test",
+                                  color="#FFF"),
                 tags=tags,
                 actions=actions)
 
@@ -33,7 +34,11 @@ def test_to_dict():
         "todoType": "TASK",
         "completionPoints": 1,
         "dueDate": datetime.datetime(2019, 3, 2, 11, 32, 5),
-        "categories": ["test", "again"],
+        "category": {
+            "id": "abc",
+            "name": "test",
+            "color": "#FFF"
+        },
         "tags": ["who", "knows"],
         "createdDate": datetime.datetime(2019, 2, 24, 10, 0, 4),
         "modifiedDate": datetime.datetime(2019, 2, 24, 10, 0, 4),

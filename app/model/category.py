@@ -4,5 +4,6 @@ from app.database import db
 
 
 class Category(db.Model, IdMixin, TimeMixin):
-    todo_id = db.Column(db.String(36), db.ForeignKey('todo.todo_id'))
+    # todo_id = db.Column(db.String(36), db.ForeignKey('todo.todo_id'))
     name = db.Column(db.String)
+    color = db.Column(db.String)

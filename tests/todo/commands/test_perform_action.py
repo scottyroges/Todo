@@ -20,7 +20,6 @@ class TestPerformActionHabit:
                              amount=1)
         buffer = HabitBuffer(buffer_type=HabitBufferType.DAY_START,
                              amount=1)
-        categories = [Category(name="test"), Category(name="again")]
         tags = [Tag(name="who"), Tag(name="knows")]
         habit = Habit(todo_id="abc",
                       todo_owner=todo_owner,
@@ -31,7 +30,9 @@ class TestPerformActionHabit:
                       frequency=1,
                       period=period,
                       buffer=buffer,
-                      categories=categories,
+                      category=Category(category_id="abc",
+                                        name="test",
+                                        color="#FFF"),
                       tags=tags)
         return habit
 
@@ -73,7 +74,6 @@ class TestPerformActionReoccur:
         todo_owner = TodoOwner(owner_id="123")
         repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_WEEK,
                                when=["Sunday"])
-        categories = [Category(name="test"), Category(name="again")]
         tags = [Tag(name="who"), Tag(name="knows")]
         reoccur = Reoccur(todo_id="abc",
                           todo_owner=todo_owner,
@@ -82,7 +82,9 @@ class TestPerformActionReoccur:
                           completion_points=1,
                           required=False,
                           repeat=repeat,
-                          categories=categories,
+                          category=Category(category_id="abc",
+                                              name="test",
+                                              color="#FFF"),
                           tags=tags)
         return reoccur
 
@@ -122,7 +124,6 @@ class TestPerformActionReoccur:
 class TestPerformActionTask:
     def _create_task(self):
         todo_owner = TodoOwner(owner_id="123")
-        categories = [Category(name="test"), Category(name="again")]
         tags = [Tag(name="who"), Tag(name="knows")]
         task = Task(todo_id="abc",
                     todo_owner=todo_owner,
@@ -130,7 +131,9 @@ class TestPerformActionTask:
                     description="description",
                     completion_points=1,
                     due_date=datetime.datetime(2019, 3, 3, 0, 29, 5),
-                    categories=categories,
+                    category=Category(category_id="abc",
+                                        name="test",
+                                        color="#FFF"),
                     tags=tags)
         return task
 

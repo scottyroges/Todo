@@ -21,7 +21,11 @@ def test_reoccur_create(client, session, test_user):
             "repeatType": "DAY_OF_WEEK",
             "when": ["Sunday"]
         },
-        "categories": ["test", "again"],
+        "category": {
+            "id": "abc",
+            "name": "test",
+            "color": "#FFF"
+        },
         "tags": ["who", "knows"],
         "required": False
     }
@@ -41,7 +45,7 @@ def test_reoccur_create(client, session, test_user):
     assert create_data["completionPoints"] == todo_data["completionPoints"]
     assert create_data["repeat"] == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
     assert create_data["required"] is False
-    assert sorted(create_data["categories"]) == sorted(["test", "again"])
+    assert create_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
     assert sorted(create_data["tags"]) == sorted(["who", "knows"])
     assert create_data["actions"] == []
     assert create_data["createdDate"] is not None
@@ -58,9 +62,9 @@ def test_reoccur_create(client, session, test_user):
     assert reoccur_record.completion_points == todo_data["completionPoints"]
     assert reoccur_record.repeat == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
     assert reoccur_record.required == todo_data['required']
-    assert len(reoccur_record.categories) == 2
-    for category in reoccur_record.categories:
-        assert category.name in ["test", "again"]
+    assert reoccur_record.category.id == "abc"
+    assert reoccur_record.category.name == "test"
+    assert reoccur_record.category.color == "#FFF"
     assert len(reoccur_record.tags) == 2
     for tag in reoccur_record.tags:
         assert tag.name in ["who", "knows"]
@@ -80,7 +84,11 @@ def test_reoccur_create_unauthorized(client, session, test_user):
             "repeatType": "DAY_OF_WEEK",
             "when": ["Sunday"]
         },
-        "categories": ["test", "again"],
+        "category": {
+            "id": "abc",
+            "name": "test",
+            "color": "#FFF"
+        },
         "tags": ["who", "knows"],
         "required": False
     }
@@ -102,7 +110,11 @@ def test_reoccur_create_admin(client, session, test_admin):
             "repeatType": "DAY_OF_WEEK",
             "when": ["Sunday"]
         },
-        "categories": ["test", "again"],
+        "category": {
+            "id": "abc",
+            "name": "test",
+            "color": "#FFF"
+        },
         "tags": ["who", "knows"],
         "required": False
     }
@@ -122,7 +134,7 @@ def test_reoccur_create_admin(client, session, test_admin):
     assert create_data["completionPoints"] == todo_data["completionPoints"]
     assert create_data["repeat"] == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
     assert create_data["required"] is False
-    assert sorted(create_data["categories"]) == sorted(["test", "again"])
+    assert create_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
     assert sorted(create_data["tags"]) == sorted(["who", "knows"])
     assert create_data["actions"] == []
     assert create_data["createdDate"] is not None
@@ -139,9 +151,9 @@ def test_reoccur_create_admin(client, session, test_admin):
     assert reoccur_record.completion_points == todo_data["completionPoints"]
     assert reoccur_record.repeat == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
     assert reoccur_record.required == todo_data['required']
-    assert len(reoccur_record.categories) == 2
-    for category in reoccur_record.categories:
-        assert category.name in ["test", "again"]
+    assert reoccur_record.category.id == "abc"
+    assert reoccur_record.category.name == "test"
+    assert reoccur_record.category.color == "#FFF"
     assert len(reoccur_record.tags) == 2
     for tag in reoccur_record.tags:
         assert tag.name in ["who", "knows"]
@@ -155,7 +167,6 @@ def _create_reoccur_record(user_id):
         'when': ["Sunday"],
         'repeatType': 'DAY_OF_WEEK'
     }
-    categories = [CategoryRecord(name="test"), CategoryRecord(name="again")]
     tags = [TagRecord(name="who"), TagRecord(name="knows")]
     actions = [ActionRecord(action_date=datetime.datetime(2019, 2, 24),
                             points=1)]
@@ -167,7 +178,9 @@ def _create_reoccur_record(user_id):
                                    completion_points=1,
                                    required=False,
                                    repeat=repeat,
-                                   categories=categories,
+                                   category=CategoryRecord(id="abc",
+                                                             name="test",
+                                                             color="#FFF"),
                                    tags=tags,
                                    actions=actions,
                                    created_date=datetime.datetime(2019, 2, 24),
@@ -196,7 +209,7 @@ def test_reoccur_read(client, session, test_user):
     assert fetch_data["completionPoints"] == reoccur_record.completion_points
     assert fetch_data["required"] == reoccur_record.required
     assert fetch_data["repeat"] == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
-    assert sorted(fetch_data["categories"]) == sorted(["test", "again"])
+    assert fetch_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
     assert sorted(fetch_data["tags"]) == sorted(["who", "knows"])
     assert fetch_data["actions"] == [{'actionDate': 'Sun, 24 Feb 2019 00:00:00 GMT', "points": 1}]
     assert fetch_data["createdDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"
@@ -235,7 +248,7 @@ def test_reoccur_read_admin(client, session, test_admin):
     assert fetch_data["completionPoints"] == reoccur_record.completion_points
     assert fetch_data["required"] == reoccur_record.required
     assert fetch_data["repeat"] == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
-    assert sorted(fetch_data["categories"]) == sorted(["test", "again"])
+    assert fetch_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
     assert sorted(fetch_data["tags"]) == sorted(["who", "knows"])
     assert fetch_data["actions"] == [{'actionDate': 'Sun, 24 Feb 2019 00:00:00 GMT', "points": 1}]
     assert fetch_data["createdDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"

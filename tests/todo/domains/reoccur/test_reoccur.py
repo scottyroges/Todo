@@ -15,7 +15,6 @@ def test_to_dict():
     todo_owner = TodoOwner(owner_id="123")
     repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType.DAY_OF_WEEK,
                            when=["Sunday"])
-    categories = [Category(name="test"), Category(name="again")]
     tags = [Tag(name="who"), Tag(name="knows")]
     actions = [Action(points=2)]
     reoccur = Reoccur(todo_id="abc",
@@ -25,7 +24,9 @@ def test_to_dict():
                       completion_points=1,
                       required=False,
                       repeat=repeat,
-                      categories=categories,
+                      category=Category(category_id="abc",
+                                        name="test",
+                                        color="#FFF"),
                       tags=tags,
                       actions=actions)
 
@@ -41,7 +42,11 @@ def test_to_dict():
             "repeatType": "DAY_OF_WEEK",
             "when": ["Sunday"],
         },
-        "categories": ["test", "again"],
+        "category": {
+            "id": "abc",
+            "name": "test",
+            "color": "#FFF"
+        },
         "tags": ["who", "knows"],
         "createdDate": datetime.datetime(2019, 2, 24, 10, 0, 4),
         "modifiedDate": datetime.datetime(2019, 2, 24, 10, 0, 4),

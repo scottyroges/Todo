@@ -18,7 +18,11 @@ def test_task_create(client, session, test_user):
         "description": "description",
         "completionPoints": 1,
         "dueDate": "2019-03-02 22:48:05",
-        "categories": ["test", "again"],
+        "category": {
+            "id": "abc",
+            "name": "test",
+            "color": "#FFF"
+        },
         "tags": ["who", "knows"]
     }
     data = json.dumps(todo_data)
@@ -36,7 +40,7 @@ def test_task_create(client, session, test_user):
     assert create_data["todoType"] == "TASK"
     assert create_data["completionPoints"] == todo_data["completionPoints"]
     assert create_data["dueDate"] == "Sat, 02 Mar 2019 22:48:05 GMT"
-    assert sorted(create_data["categories"]) == sorted(["test", "again"])
+    assert create_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
     assert sorted(create_data["tags"]) == sorted(["who", "knows"])
     assert create_data["actions"] == []
     assert create_data["createdDate"] is not None
@@ -52,9 +56,9 @@ def test_task_create(client, session, test_user):
     assert task_record.todo_type == TodoType.TASK
     assert task_record.completion_points == todo_data["completionPoints"]
     assert task_record.due_date == datetime.datetime(2019, 3, 2, 22, 48, 5)
-    assert len(task_record.categories) == 2
-    for category in task_record.categories:
-        assert category.name in ["test", "again"]
+    assert task_record.category.id == "abc"
+    assert task_record.category.name == "test"
+    assert task_record.category.color == "#FFF"
     assert len(task_record.tags) == 2
     for tag in task_record.tags:
         assert tag.name in ["who", "knows"]
@@ -71,7 +75,11 @@ def test_task_create_unauthorized(client, session, test_user):
         "description": "description",
         "completionPoints": 1,
         "dueDate": "2019-03-02 22:48:05",
-        "categories": ["test", "again"],
+        "category": {
+            "id": "abc",
+            "name": "test",
+            "color": "#FFF"
+        },
         "tags": ["who", "knows"]
     }
     data = json.dumps(todo_data)
@@ -89,7 +97,11 @@ def test_task_create_admin(client, session, test_admin):
         "description": "description",
         "completionPoints": 1,
         "dueDate": "2019-03-02 22:48:05",
-        "categories": ["test", "again"],
+        "category": {
+            "id": "abc",
+            "name": "test",
+            "color": "#FFF"
+        },
         "tags": ["who", "knows"]
     }
     data = json.dumps(todo_data)
@@ -107,7 +119,7 @@ def test_task_create_admin(client, session, test_admin):
     assert create_data["todoType"] == "TASK"
     assert create_data["dueDate"] == "Sat, 02 Mar 2019 22:48:05 GMT"
     assert create_data["completionPoints"] == todo_data["completionPoints"]
-    assert sorted(create_data["categories"]) == sorted(["test", "again"])
+    assert create_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
     assert sorted(create_data["tags"]) == sorted(["who", "knows"])
     assert create_data["actions"] == []
     assert create_data["createdDate"] is not None
@@ -123,9 +135,9 @@ def test_task_create_admin(client, session, test_admin):
     assert task_record.todo_type == TodoType.TASK
     assert task_record.completion_points == todo_data["completionPoints"]
     assert task_record.due_date == datetime.datetime(2019, 3, 2, 22, 48, 5)
-    assert len(task_record.categories) == 2
-    for category in task_record.categories:
-        assert category.name in ["test", "again"]
+    assert task_record.category.id == "abc"
+    assert task_record.category.name == "test"
+    assert task_record.category.color == "#FFF"
     assert len(task_record.tags) == 2
     for tag in task_record.tags:
         assert tag.name in ["who", "knows"]
@@ -135,7 +147,6 @@ def test_task_create_admin(client, session, test_admin):
 
 
 def _create_task_record(user_id):
-    categories = [CategoryRecord(name="test"), CategoryRecord(name="again")]
     tags = [TagRecord(name="who"), TagRecord(name="knows")]
     actions = [ActionRecord(action_date=datetime.datetime(2019, 2, 24),
                             points=1)]
@@ -146,7 +157,9 @@ def _create_task_record(user_id):
                              todo_type=TodoType.TASK,
                              completion_points=1,
                              due_date=datetime.datetime(2019, 3, 2),
-                             categories=categories,
+                             category=CategoryRecord(id="abc",
+                                                     name="test",
+                                                     color="#FFF"),
                              tags=tags,
                              actions=actions,
                              created_date=datetime.datetime(2019, 2, 24),
@@ -174,7 +187,7 @@ def test_task_read(client, session, test_user):
     assert fetch_data["todoType"] == task_record.todo_type.name
     assert fetch_data["completionPoints"] == task_record.completion_points
     assert fetch_data["dueDate"] == "Sat, 02 Mar 2019 00:00:00 GMT"
-    assert sorted(fetch_data["categories"]) == sorted(["test", "again"])
+    assert fetch_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
     assert sorted(fetch_data["tags"]) == sorted(["who", "knows"])
     assert fetch_data["actions"] == [{'actionDate': 'Sun, 24 Feb 2019 00:00:00 GMT', "points": 1}]
     assert fetch_data["createdDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"
@@ -212,7 +225,7 @@ def test_task_read_admin(client, session, test_admin):
     assert fetch_data["todoType"] == task_record.todo_type.name
     assert fetch_data["completionPoints"] == task_record.completion_points
     assert fetch_data["dueDate"] == "Sat, 02 Mar 2019 00:00:00 GMT"
-    assert sorted(fetch_data["categories"]) == sorted(["test", "again"])
+    assert fetch_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
     assert sorted(fetch_data["tags"]) == sorted(["who", "knows"])
     assert fetch_data["actions"] == [{'actionDate': 'Sun, 24 Feb 2019 00:00:00 GMT', "points": 1}]
     assert fetch_data["createdDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"

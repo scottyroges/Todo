@@ -25,7 +25,6 @@ def test_to_record():
                          amount=1)
     buffer = HabitBuffer(buffer_type=HabitBufferType.DAY_START,
                          amount=1)
-    categories = [DomainCategory(name="test"), DomainCategory(name="again")]
     tags = [DomainTag(name="who"), DomainTag(name="knows")]
     actions = [DomainAction()]
     habit = DomainHabit(todo_id="abc",
@@ -37,7 +36,9 @@ def test_to_record():
                         frequency=1,
                         period=period,
                         buffer=buffer,
-                        categories=categories,
+                        category=DomainCategory(category_id="abc",
+                                                name="test",
+                                                color="#FFF"),
                         tags=tags,
                         actions=actions)
 
@@ -58,9 +59,11 @@ def test_to_record():
         'amount': 1,
         'bufferType': 'DAY_START'
     }
-    for category_record in habit_record.categories:
-        category = filter(lambda x: x.name == category_record.name, habit.categories)
-        assert category is not None
+
+    assert habit_record.category.id == "abc"
+    assert habit_record.category.name == "test"
+    assert habit_record.category.color == "#FFF"
+
     for tag_record in habit_record.tags:
         tag = filter(lambda x: x.name == tag_record.name, habit.tags)
         assert tag is not None
@@ -79,7 +82,6 @@ def test_from_record():
         'amount': 1,
         'bufferType': 'DAY_START'
     }
-    categories = [CategoryRecord(name="test"), CategoryRecord(name="again")]
     tags = [TagRecord(name="who"), TagRecord(name="knows")]
     actions = [ActionRecord(action_date=datetime.datetime(2019, 2, 24),
                             points=1)]
@@ -93,7 +95,9 @@ def test_from_record():
                                frequency=1,
                                period=period,
                                buffer=buffer,
-                               categories=categories,
+                               category=CategoryRecord(id="abc",
+                                                       name="test",
+                                                       color="#FFF"),
                                tags=tags,
                                actions=actions,
                                created_date=datetime.datetime(2019, 2, 24),
@@ -112,9 +116,9 @@ def test_from_record():
     assert habit.period.period_type == HabitPeriodType.WEEKS
     assert habit.buffer.amount == 1
     assert habit.buffer.buffer_type == HabitBufferType.DAY_START
-    for category in habit.categories:
-        category_record = filter(lambda x: x.name == category.name, habit_record.categories)
-        assert category_record is not None
+    assert habit.category.category_id == "abc"
+    assert habit.category.name == "test"
+    assert habit.category.color == "#FFF"
     for tag in habit.tags:
         tag_record = filter(lambda x: x.name == tag.name, habit_record.tags)
         assert tag_record is not None
