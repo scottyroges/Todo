@@ -54,6 +54,7 @@ class ReoccurTransformer:
         todo_owner = TodoOwner(owner_id=reoccur_record.todo_owner_id)
         repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType[reoccur_record.repeat.get("repeatType")],
                                when=reoccur_record.repeat.get("when"))
+        
         category = DomainCategory(category_id=reoccur_record.category.id,
                                   name=reoccur_record.category.name,
                                   color=reoccur_record.category.color)
