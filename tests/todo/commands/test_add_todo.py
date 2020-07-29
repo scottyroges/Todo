@@ -51,8 +51,6 @@ class TestAddTodoHabit:
         assert todo.period.period_type == HabitPeriodType.WEEKS
         assert todo.period.amount == 1
         assert todo.category.category_id == "abc"
-        assert todo.category.name == "test"
-        assert todo.category.color == "#FFF"
         for tag in todo.tags:
             assert tag.name in ["who", "knows"]
         assert todo.actions == []
@@ -121,8 +119,6 @@ class TestAddTodoReoccur:
         assert todo.repeat.repeat_type == ReoccurRepeatType.DAY_OF_WEEK
         assert todo.repeat.when == ["Sunday"]
         assert todo.category.category_id == "abc"
-        assert todo.category.name == "test"
-        assert todo.category.color == "#FFF"
         for tag in todo.tags:
             assert tag.name in ["who", "knows"]
         assert todo.actions == []
@@ -180,8 +176,6 @@ class TestAddTodoTask:
         assert todo.completion_points == 1
         assert todo.due_date == datetime.datetime(2019, 3, 3, 0, 20, 5)
         assert todo.category.category_id == "abc"
-        assert todo.category.name == "test"
-        assert todo.category.color == "#FFF"
         for tag in todo.tags:
             assert tag.name in ["who", "knows"]
         assert todo.actions == []

@@ -9,6 +9,7 @@ from app.model import (
     Action as ActionRecord
 )
 from app.todo.domains.todo_type import TodoType
+from app.utils import make
 
 
 @pytest.mark.integration
@@ -25,6 +26,9 @@ def test_task_create(client, session, test_user):
         },
         "tags": ["who", "knows"]
     }
+
+    make.a_category(session)
+
     data = json.dumps(todo_data)
     create_resp = client.post('/task',
                               data=data,
@@ -82,6 +86,9 @@ def test_task_create_unauthorized(client, session, test_user):
         },
         "tags": ["who", "knows"]
     }
+
+    make.a_category(session)
+
     data = json.dumps(todo_data)
     create_resp = client.post('/task',
                               data=data,
@@ -104,6 +111,9 @@ def test_task_create_admin(client, session, test_admin):
         },
         "tags": ["who", "knows"]
     }
+
+    make.a_category(session)
+
     data = json.dumps(todo_data)
     create_resp = client.post('/task',
                               data=data,
@@ -146,32 +156,16 @@ def test_task_create_admin(client, session, test_admin):
     assert task_record.modified_date is not None
 
 
-def _create_task_record(user_id):
-    tags = [TagRecord(name="who"), TagRecord(name="knows")]
-    actions = [ActionRecord(action_date=datetime.datetime(2019, 2, 24),
-                            points=1)]
-    task_record = TaskRecord(todo_id="abc",
-                             todo_owner_id=user_id,
-                             name="task",
-                             description="description",
-                             todo_type=TodoType.TASK,
-                             completion_points=1,
-                             due_date=datetime.datetime(2019, 3, 2),
-                             category=CategoryRecord(id="abc",
-                                                     name="test",
-                                                     color="#FFF"),
-                             tags=tags,
-                             actions=actions,
-                             created_date=datetime.datetime(2019, 2, 24),
-                             modified_date=datetime.datetime(2019, 2, 24))
-    return task_record
-
-
 @pytest.mark.integration
 def test_task_read(client, session, test_user):
-    task_record = _create_task_record(test_user.get("user_id"))
-    session.add(task_record)
-    session.commit()
+    task_record = make.a_task(
+        session,
+        todo_owner_id=test_user.get("user_id"),
+        due_date=datetime.datetime(2019, 3, 2),
+        tags=[make.a_tag(session, name="knows"),
+              make.a_tag(session, name="who")],
+        actions=[make.an_action(session)]
+    )
 
     fetch_resp = client.get('/task/%s' % task_record.todo_id,
                             headers={'Authorization': test_user.get("token")})
@@ -196,9 +190,14 @@ def test_task_read(client, session, test_user):
 
 @pytest.mark.integration
 def test_task_read_unauthorized(client, session, test_user):
-    task_record = _create_task_record("123")
-    session.add(task_record)
-    session.commit()
+    task_record = make.a_task(
+        session,
+        todo_owner_id="123",
+        due_date=datetime.datetime(2019, 3, 2),
+        tags=[make.a_tag(session, name="knows"),
+              make.a_tag(session, name="who")],
+        actions=[make.an_action(session)]
+    )
 
     fetch_resp = client.get('/task/%s' % task_record.todo_id,
                             headers={'Authorization': test_user.get("token")})
@@ -207,9 +206,14 @@ def test_task_read_unauthorized(client, session, test_user):
 
 @pytest.mark.integration
 def test_task_read_admin(client, session, test_admin):
-    task_record = _create_task_record("123")
-    session.add(task_record)
-    session.commit()
+    task_record = make.a_task(
+        session,
+        todo_owner_id="123",
+        due_date=datetime.datetime(2019, 3, 2),
+        tags=[make.a_tag(session, name="knows"),
+              make.a_tag(session, name="who")],
+        actions=[make.an_action(session)]
+    )
 
     fetch_resp = client.get('/task/%s' % task_record.todo_id,
                             headers={'Authorization': test_admin.get("token")})

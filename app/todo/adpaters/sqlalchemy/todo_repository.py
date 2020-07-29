@@ -15,7 +15,8 @@ class TodoRepository:
 
         self._session.add(todo_record)
         self._session.commit()
-        return todo
+
+        return self._get_transformer(todo.todo_type).from_record(todo_record)
 
     def read(self, todo_id):
         todo_record = (self._session.query(Todo)
@@ -33,9 +34,9 @@ class TodoRepository:
     def update(self, todo):
         todo_record = self._get_transformer(todo.todo_type).to_record(todo)
 
-        self._session.merge(todo_record)
+        todo_record = self._session.merge(todo_record)
         self._session.commit()
-        return todo
+        return self._get_transformer(todo.todo_type).from_record(todo_record)
 
     def _get_transformer(self, todo_type):
         if todo_type == TodoType.HABIT:

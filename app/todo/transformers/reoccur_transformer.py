@@ -20,12 +20,6 @@ class ReoccurTransformer:
             "when": reoccur.repeat.when
         }
 
-        category = CategoryRecord(
-            id=reoccur.category.category_id,
-            name=reoccur.category.name,
-            color=reoccur.category.color
-        )
-
         tags = [TagRecord(id=tag.tag_id,
                           name=tag.name)
                 for tag in reoccur.tags]
@@ -43,7 +37,7 @@ class ReoccurTransformer:
                              completion_points=reoccur.completion_points,
                              repeat=repeat,
                              required=reoccur.required,
-                             category=category,
+                             category_id=reoccur.category.category_id,
                              tags=tags,
                              actions=actions,
                              created_date=reoccur.created_date,

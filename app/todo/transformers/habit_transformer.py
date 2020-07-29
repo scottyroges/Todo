@@ -26,12 +26,6 @@ class HabitTransformer:
             "amount": habit.buffer.amount
         }
 
-        category = CategoryRecord(
-            id=habit.category.category_id,
-            name=habit.category.name,
-            color=habit.category.color
-        )
-
         tags = [TagRecord(id=tag.tag_id,
                           name=tag.name)
                 for tag in habit.tags]
@@ -51,7 +45,7 @@ class HabitTransformer:
                            frequency=habit.frequency,
                            period=period,
                            buffer=buffer,
-                           category=category,
+                           category_id=habit.category.category_id,
                            tags=tags,
                            actions=actions,
                            created_date=habit.created_date,

@@ -7,6 +7,7 @@ from app.todo.domains.habit.habit_period import HabitPeriodType
 from app.todo.domains.reoccur.reoccur_repeat import ReoccurRepeat, ReoccurRepeatType
 from app.todo.domains.todo_type import TodoType
 from app.todo.todo_factory import TodoFactory
+from app.utils import make
 
 
 @freeze_time("2019-02-24")
@@ -33,6 +34,8 @@ def test_create_todo_habit():
         },
         "tags": ["who", "knows"]
     }
+
+    # make.a_category()
     todo_type = TodoType.HABIT
     todo = TodoFactory.create_todo(todo_data, todo_type)
 
@@ -49,8 +52,6 @@ def test_create_todo_habit():
     assert todo.period.period_type == HabitPeriodType.WEEKS
     assert todo.period.amount == 1
     assert todo.category.category_id == "abc"
-    assert todo.category.name == "test"
-    assert todo.category.color == "#FFF"
     for tag in todo.tags:
         assert tag.name in ["who", "knows"]
     assert todo.actions == []
@@ -90,8 +91,6 @@ def test_create_todo_reoccur():
     assert todo.repeat.repeat_type == ReoccurRepeatType.DAY_OF_WEEK
     assert todo.repeat.when == ["Sunday"]
     assert todo.category.category_id == "abc"
-    assert todo.category.name == "test"
-    assert todo.category.color == "#FFF"
     for tag in todo.tags:
         assert tag.name in ["who", "knows"]
     assert todo.actions == []
@@ -125,8 +124,6 @@ def test_create_todo_task():
     assert todo.completion_points == 1
     assert todo.due_date == datetime.datetime(2019, 3, 3, 0, 3, 5)
     assert todo.category.category_id == "abc"
-    assert todo.category.name == "test"
-    assert todo.category.color == "#FFF"
     for tag in todo.tags:
         assert tag.name in ["who", "knows"]
     assert todo.actions == []

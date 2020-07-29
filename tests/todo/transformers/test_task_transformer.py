@@ -42,9 +42,7 @@ def test_to_record():
     assert task_record.completion_points == task.completion_points
     assert task_record.due_date == task.due_date
 
-    assert task_record.category.id == "abc"
-    assert task_record.category.name == "test"
-    assert task_record.category.color == "#FFF"
+    assert task_record.category_id == "abc"
 
     for tag_record in task_record.tags:
         tag = filter(lambda x: x.name == tag_record.name, task.tags)

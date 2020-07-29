@@ -15,12 +15,6 @@ from app.todo.domains.todo_owner import TodoOwner
 class TaskTransformer:
     @classmethod
     def to_record(cls, task: DomainTask):
-        category = CategoryRecord(
-            id=task.category.category_id,
-            name=task.category.name,
-            color=task.category.color
-        )
-
         tags = [TagRecord(id=tag.tag_id,
                           name=tag.name)
                 for tag in task.tags]
@@ -37,7 +31,7 @@ class TaskTransformer:
                           todo_type=task.todo_type,
                           completion_points=task.completion_points,
                           due_date=task.due_date,
-                          category=category,
+                          category_id=task.category.category_id,
                           tags=tags,
                           actions=actions,
                           created_date=task.created_date,

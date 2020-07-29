@@ -60,9 +60,7 @@ def test_to_record():
         'bufferType': 'DAY_START'
     }
 
-    assert habit_record.category.id == "abc"
-    assert habit_record.category.name == "test"
-    assert habit_record.category.color == "#FFF"
+    assert habit_record.category_id == "abc"
 
     for tag_record in habit_record.tags:
         tag = filter(lambda x: x.name == tag_record.name, habit.tags)

@@ -32,9 +32,7 @@ class TodoFactory:
 
         category_data = todo_data.get("category")
         todo.category = Category(
-            category_id=category_data.get("id"),
-            name=category_data.get("name"),
-            color=category_data.get("color")
+            category_id=category_data.get("id")
         )
 
         tags_data = todo_data.get("tags", [])

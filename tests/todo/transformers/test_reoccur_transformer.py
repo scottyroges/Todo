@@ -49,9 +49,7 @@ def test_to_record():
         'when': ["Sunday"],
         'repeatType': 'DAY_OF_WEEK'
     }
-    assert reoccur_record.category.id == "abc"
-    assert reoccur_record.category.name == "test"
-    assert reoccur_record.category.color == "#FFF"
+    assert reoccur_record.category_id == "abc"
     for tag_record in reoccur_record.tags:
         tag = filter(lambda x: x.name == tag_record.name, reoccur.tags)
         assert tag is not None

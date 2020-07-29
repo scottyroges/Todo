@@ -1,14 +1,12 @@
-import datetime
 import json
 import pytest
 
 from app.model import (
     Habit as HabitRecord,
-    Category as CategoryRecord,
-    Tag as TagRecord,
-    Action as ActionRecord
+
 )
 from app.todo.domains.todo_type import TodoType
+from app.utils import make
 
 
 @pytest.mark.integration
@@ -28,12 +26,13 @@ def test_habit_create(client, session, test_user):
             "amount": 1
         },
         "category": {
-            "id": "abc",
-            "name": "test",
-            "color": "#FFF"
+            "id": "abc"
         },
         "tags": ["who", "knows"]
     }
+
+    make.a_category(session)
+
     data = json.dumps(todo_data)
     create_resp = client.post('/habit',
                               data=data,
@@ -131,12 +130,13 @@ def test_habit_create_admin(client, session, test_admin):
             "amount": 1
         },
         "category": {
-            "id": "abc",
-            "name": "test",
-            "color": "#FFF"
+            "id": "abc"
         },
         "tags": ["who", "knows"]
     }
+
+    make.a_category(session)
+
     data = json.dumps(todo_data)
     create_resp = client.post('/habit',
                               data=data,
@@ -185,44 +185,15 @@ def test_habit_create_admin(client, session, test_admin):
     assert habit_record.modified_date is not None
 
 
-def _create_habit_record(user_id):
-    period = {
-        'amount': 1,
-        'periodType': 'WEEKS',
-        'start': None
-    }
-    buffer = {
-        'amount': 1,
-        'bufferType': 'DAY_START'
-    }
-    tags = [TagRecord(name="who"), TagRecord(name="knows")]
-    actions = [ActionRecord(action_date=datetime.datetime(2019, 2, 24),
-                            points=1)]
-    habit_record = HabitRecord(todo_id="abc",
-                               todo_owner_id=user_id,
-                               name="habit",
-                               description="description",
-                               todo_type=TodoType.HABIT,
-                               points_per=1,
-                               completion_points=1,
-                               frequency=1,
-                               period=period,
-                               buffer=buffer,
-                               category=CategoryRecord(id="abc",
-                                                       name="test",
-                                                       color="#FFF"),
-                               tags=tags,
-                               actions=actions,
-                               created_date=datetime.datetime(2019, 2, 24),
-                               modified_date=datetime.datetime(2019, 2, 24))
-    return habit_record
-
-
 @pytest.mark.integration
 def test_habit_read(client, session, test_user):
-    habit_record = _create_habit_record(test_user.get("user_id"))
-    session.add(habit_record)
-    session.commit()
+    habit_record = make.a_habit(
+        session,
+        todo_owner_id=test_user.get("user_id"),
+        tags=[make.a_tag(session, name="knows"),
+              make.a_tag(session, name="who")],
+        actions=[make.an_action(session)]
+    )
 
     fetch_resp = client.get('/habit/%s' % habit_record.todo_id,
                             headers={'Authorization': test_user.get("token")})
@@ -250,7 +221,13 @@ def test_habit_read(client, session, test_user):
 
 @pytest.mark.integration
 def test_habit_read_unauthorized(client, session, test_user):
-    habit_record = _create_habit_record("123")
+    habit_record = make.a_habit(
+        session,
+        todo_owner_id="123",
+        tags=[make.a_tag(session, name="knows"),
+              make.a_tag(session, name="who")],
+        actions=[make.an_action(session)]
+    )
     session.add(habit_record)
     session.commit()
 
@@ -261,7 +238,13 @@ def test_habit_read_unauthorized(client, session, test_user):
 
 @pytest.mark.integration
 def test_habit_read_admin(client, session, test_admin):
-    habit_record = _create_habit_record("123")
+    habit_record = make.a_habit(
+        session,
+        todo_owner_id="123",
+        tags=[make.a_tag(session, name="knows"),
+              make.a_tag(session, name="who")],
+        actions=[make.an_action(session)]
+    )
     session.add(habit_record)
     session.commit()
 
