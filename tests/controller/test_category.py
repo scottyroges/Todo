@@ -3,6 +3,7 @@ import json
 import pytest
 
 from app.model import Category
+from app.utils import make
 
 
 @pytest.mark.integration
@@ -33,7 +34,7 @@ def test_category_create(client, session, test_user):
 
 
 @pytest.mark.integration
-def test_habit_create_unauthorized(client, session, test_user):
+def test_category_create_unauthorized(client, session, test_user):
     category_data = {
         "userId": "123",
         "name": "test",
@@ -47,7 +48,7 @@ def test_habit_create_unauthorized(client, session, test_user):
 
 
 @pytest.mark.integration
-def test_habit_create_admin(client, session, test_admin):
+def test_category_create_admin(client, session, test_admin):
     category_data = {
         "name": "test",
         "color": "#FFF"
@@ -70,3 +71,19 @@ def test_habit_create_admin(client, session, test_admin):
     assert category_record.id is not None
     assert category_record.name == category_data["name"]
     assert category_record.color == category_data["color"]
+
+
+@pytest.mark.integration
+def test_category_get_categories(client, session, test_user):
+    make.a_category(session, user_id=test_user.get("user_id"))
+    read_resp = client.get('/categories',
+                           headers={'Authorization': test_user.get("token")})
+
+    assert read_resp.status_code == 200
+
+    read_data = json.loads(read_resp.data.decode('utf-8'))
+
+    assert len(read_data) == 1
+    assert read_data[0]['id'] is not None
+    assert read_data[0]['name'] == "test"
+    assert read_data[0]['color'] == "#FFF"

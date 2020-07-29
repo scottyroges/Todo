@@ -29,4 +29,4 @@ def get_categories():
         user_id = get_request().user_id
 
     categories = GetCategories().execute(user_id)
-    return jsonify(category.to_dict() for category in categories)
+    return jsonify([category.to_dict() for category in categories])
