@@ -1,5 +1,5 @@
 from app.todo.adpaters.sqlalchemy.todo_repository import TodoRepository
-from app.todo.todo_repository_factory import TodoRepositoryFactory
+from app.todo.ports.todo_repository_factory import TodoRepositoryFactory
 
 
 def test_create():

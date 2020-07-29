@@ -4,7 +4,7 @@ import pytest
 @pytest.fixture()
 def todo_repo(mocker):
     repo = TestTodoRepository()
-    mock_repo = mocker.patch("app.todo.todo_repository_factory.TodoRepositoryFactory.create")
+    mock_repo = mocker.patch("app.todo.ports.todo_repository_factory.TodoRepositoryFactory.create")
     mock_repo.return_value = repo
     return repo
 
@@ -29,3 +29,20 @@ class TestTodoRepository:
 
     def update(self, todo):
         return todo
+
+
+@pytest.fixture()
+def category_repo(mocker):
+    repo = TestCategoryRepository()
+    mock_repo = mocker.patch("app.todo.ports.category_repository_factory.CategoryRepositoryFactory.create")
+    mock_repo.return_value = repo
+    return repo
+
+
+class TestCategoryRepository:
+    def __init__(self, categories=None):
+        self.categories = categories or []
+
+    def add(self, category):
+        self.categories.append(category)
+        return category

@@ -1,6 +1,6 @@
 from app.auth.auth_util import is_owner_or_admin
 from app.errors import UnauthorizedError
-from app.todo.todo_repository_factory import TodoRepositoryFactory
+from app.todo.ports.todo_repository_factory import TodoRepositoryFactory
 from app.todo.todo_factory import TodoFactory
 
 

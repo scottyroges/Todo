@@ -2,7 +2,7 @@ import datetime
 
 from app.todo.commands.get_todo import GetTodo
 from app.todo.domains.action import Action
-from app.todo.todo_repository_factory import TodoRepositoryFactory
+from app.todo.ports.todo_repository_factory import TodoRepositoryFactory
 
 
 class PerformAction:

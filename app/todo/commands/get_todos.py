@@ -1,4 +1,4 @@
-from app.todo.todo_repository_factory import TodoRepositoryFactory
+from app.todo.ports.todo_repository_factory import TodoRepositoryFactory
 
 
 class GetAllTodos:
