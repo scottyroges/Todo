@@ -5,6 +5,12 @@ from app.model import Category, Habit, Tag, Action, Reoccur, Task
 from app.todo.domains.todo_type import TodoType
 
 
+def _save(session, record):
+    if session is not None:
+        session.add(record)
+        session.commit()
+
+
 def a_category(session, **kwargs):
     data = kwargs
     data["id"] = data.get("id", "abc")
@@ -13,8 +19,7 @@ def a_category(session, **kwargs):
 
     category_record = Category(**data)
 
-    session.add(category_record)
-    session.commit()
+    _save(session, category_record)
     return category_record
 
 
@@ -45,8 +50,7 @@ def a_habit(session, **kwargs):
 
     habit_record = Habit(**data)
 
-    session.add(habit_record)
-    session.commit()
+    _save(session, habit_record)
     return habit_record
 
 
@@ -71,8 +75,7 @@ def a_reoccur(session, **kwargs):
 
     reoccur_record = Reoccur(**data)
 
-    session.add(reoccur_record)
-    session.commit()
+    _save(session, reoccur_record)
     return reoccur_record
 
 
@@ -93,8 +96,7 @@ def a_task(session, **kwargs):
 
     task_record = Task(**data)
 
-    session.add(task_record)
-    session.commit()
+    _save(session, task_record)
     return task_record
 
 
@@ -104,8 +106,7 @@ def a_tag(session, **kwargs):
 
     tag_record = Tag(**data)
 
-    session.add(tag_record)
-    session.commit()
+    _save(session, tag_record)
     return tag_record
 
 
@@ -116,6 +117,5 @@ def an_action(session, **kwargs):
 
     action_record = Action(**data)
 
-    session.add(action_record)
-    session.commit()
+    _save(session, action_record)
     return action_record

@@ -21,7 +21,7 @@ class TestTodoRepository:
 
     def read_all(self, user_id):
         return list(filter(lambda x: x.todo_owner.owner_id == user_id,
-                      self.todos))
+                           self.todos))
 
     def add(self, todo):
         self.todos.append(todo)
@@ -46,3 +46,17 @@ class TestCategoryRepository:
     def add(self, category):
         self.categories.append(category)
         return category
+
+    def read_all(self, user_id):
+        return list(filter(lambda x: x.user_id == user_id,
+                           self.categories))
+
+    def read(self, category_id):
+        for category in self.categories:
+            if category.id == category_id:
+                return category
+        return None
+
+    def update(self, category):
+        return category
+

@@ -18,6 +18,20 @@ class CategoryRepository:
 
         return CategoryTransformer.from_record(category_record)
 
+    def read(self, category_id):
+        category_record = (self._session.query(Category).get(category_id))
+        if category_record is None:
+            return None
+
+        return CategoryTransformer.from_record(category_record)
+
+    def update(self, category):
+        category_record = CategoryTransformer.to_record(category)
+
+        category_record_record = self._session.merge(category_record)
+        self._session.commit()
+        return CategoryTransformer.from_record(category_record_record)
+
     def read_all(self, user_id):
         category_records = self._session.query(Category).filter_by(user_id=user_id).all()
         return [CategoryTransformer.from_record(category_record)
