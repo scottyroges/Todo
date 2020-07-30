@@ -3,9 +3,6 @@ from flask import Flask, jsonify
 from app.config import config
 from app.controller.action import action_controller
 from app.controller.category import category_controller
-from app.controller.habit import habit_controller
-from app.controller.reoccur import reoccur_controller
-from app.controller.task import task_controller
 from app.controller.test import test_controller
 from app.controller.todo import todo_controller
 from app.database import db
@@ -22,10 +19,7 @@ def create_app():
     db.init_app(app)
 
     app.register_blueprint(category_controller)
-    app.register_blueprint(habit_controller)
     app.register_blueprint(action_controller)
-    app.register_blueprint(reoccur_controller)
-    app.register_blueprint(task_controller)
     app.register_blueprint(todo_controller)
     app.register_blueprint(test_controller)
 

@@ -12,10 +12,11 @@ def _save(session, record):
 
 
 def a_category(session, **kwargs):
-    data = kwargs
-    data["id"] = data.get("id", "abc")
-    data["name"] = data.get("name", "test")
-    data["color"] = data.get("color", "#FFF")
+    data = dict()
+    data["id"] = kwargs.get("id", str(uuid.uuid4()))
+    data["user_id"] = kwargs.get("user_id", str(uuid.uuid4()))
+    data["name"] = kwargs.get("name", "test")
+    data["color"] = kwargs.get("color", "#FFF")
 
     category_record = Category(**data)
 
@@ -24,29 +25,29 @@ def a_category(session, **kwargs):
 
 
 def a_habit(session, **kwargs):
-    data = kwargs
-    data["todo_id"] = data.get("todo_id", str(uuid.uuid4()))
-    data["todo_owner_id"] = data.get("todo_owner_id", str(uuid.uuid4()))
-    data["name"] = data.get("name", "habit")
-    data["description"] = data.get("description", "description")
-    data["todo_type"] = data.get("todo_type", TodoType.HABIT)
-    data["points_per"] = data.get("points_per", 1)
-    data["completion_points"] = data.get("completion_points", 1)
-    data["frequency"] = data.get("frequency", 1)
-    data["period"] = data.get("period", {
+    data = dict()
+    data["todo_id"] = kwargs.get("todo_id", str(uuid.uuid4()))
+    data["todo_owner_id"] = kwargs.get("todo_owner_id", str(uuid.uuid4()))
+    data["name"] = kwargs.get("name", "habit")
+    data["description"] = kwargs.get("description", "description")
+    data["todo_type"] = kwargs.get("todo_type", TodoType.HABIT)
+    data["points_per"] = kwargs.get("points_per", 1)
+    data["completion_points"] = kwargs.get("completion_points", 1)
+    data["frequency"] = kwargs.get("frequency", 1)
+    data["period"] = kwargs.get("period", {
         'amount': 1,
         'periodType': 'WEEKS',
         'start': None
     })
-    data["buffer"] = data.get("buffer", {
+    data["buffer"] = kwargs.get("buffer", {
         'amount': 1,
         'bufferType': 'DAY_START'
     })
-    data["category"] = data.get("category", a_category(session))
-    data["tags"] = data.get("tags", [])
-    data["actions"] = data.get("actions", [])
-    data["created_date"] = data.get("created_date", datetime.datetime(2019, 2, 24))
-    data["modified_date"] = data.get("modified_date", datetime.datetime(2019, 2, 24))
+    data["category"] = kwargs.get("category") or a_category(session)
+    data["tags"] = kwargs.get("tags", [])
+    data["actions"] = kwargs.get("actions", [])
+    data["created_date"] = kwargs.get("created_date", datetime.datetime(2019, 2, 24))
+    data["modified_date"] = kwargs.get("modified_date", datetime.datetime(2019, 2, 24))
 
     habit_record = Habit(**data)
 
@@ -55,23 +56,23 @@ def a_habit(session, **kwargs):
 
 
 def a_reoccur(session, **kwargs):
-    data = kwargs
-    data["todo_id"] = data.get("todo_id", str(uuid.uuid4()))
-    data["todo_owner_id"] = data.get("todo_owner_id", str(uuid.uuid4()))
-    data["name"] = data.get("name", "reoccur")
-    data["description"] = data.get("description", "description")
-    data["todo_type"] = data.get("todo_type", TodoType.REOCCUR)
-    data["completion_points"] = data.get("completion_points", 1)
-    data["required"] = data.get("required", False)
-    data["repeat"] = data.get("repeat", {
+    data = dict()
+    data["todo_id"] = kwargs.get("todo_id", str(uuid.uuid4()))
+    data["todo_owner_id"] = kwargs.get("todo_owner_id", str(uuid.uuid4()))
+    data["name"] = kwargs.get("name", "reoccur")
+    data["description"] = kwargs.get("description", "description")
+    data["todo_type"] = kwargs.get("todo_type", TodoType.REOCCUR)
+    data["completion_points"] = kwargs.get("completion_points", 1)
+    data["required"] = kwargs.get("required", False)
+    data["repeat"] = kwargs.get("repeat", {
         'when': ["Sunday"],
         'repeatType': 'DAY_OF_WEEK'
     })
-    data["category"] = data.get("category", a_category(session))
-    data["tags"] = data.get("tags", [])
-    data["actions"] = data.get("actions", [])
-    data["created_date"] = data.get("created_date", datetime.datetime(2019, 2, 24))
-    data["modified_date"] = data.get("modified_date", datetime.datetime(2019, 2, 24))
+    data["category"] = kwargs.get("category") or a_category(session)
+    data["tags"] = kwargs.get("tags", [])
+    data["actions"] = kwargs.get("actions", [])
+    data["created_date"] = kwargs.get("created_date", datetime.datetime(2019, 2, 24))
+    data["modified_date"] = kwargs.get("modified_date", datetime.datetime(2019, 2, 24))
 
     reoccur_record = Reoccur(**data)
 
@@ -80,19 +81,19 @@ def a_reoccur(session, **kwargs):
 
 
 def a_task(session, **kwargs):
-    data = kwargs
-    data["todo_id"] = data.get("todo_id", str(uuid.uuid4()))
-    data["todo_owner_id"] = data.get("todo_owner_id", str(uuid.uuid4()))
-    data["name"] = data.get("name", "task")
-    data["description"] = data.get("description", "description")
-    data["todo_type"] = data.get("todo_type", TodoType.TASK)
-    data["completion_points"] = data.get("completion_points", 1)
-    data["due_date"] = data.get("due_date")
-    data["category"] = data.get("category", a_category(session))
-    data["tags"] = data.get("tags", [])
-    data["actions"] = data.get("actions", [])
-    data["created_date"] = data.get("created_date", datetime.datetime(2019, 2, 24))
-    data["modified_date"] = data.get("modified_date", datetime.datetime(2019, 2, 24))
+    data = dict()
+    data["todo_id"] = kwargs.get("todo_id", str(uuid.uuid4()))
+    data["todo_owner_id"] = kwargs.get("todo_owner_id", str(uuid.uuid4()))
+    data["name"] = kwargs.get("name", "task")
+    data["description"] = kwargs.get("description", "description")
+    data["todo_type"] = kwargs.get("todo_type", TodoType.TASK)
+    data["completion_points"] = kwargs.get("completion_points", 1)
+    data["due_date"] = kwargs.get("due_date")
+    data["category"] = kwargs.get("category") or a_category(session)
+    data["tags"] = kwargs.get("tags", [])
+    data["actions"] = kwargs.get("actions", [])
+    data["created_date"] = kwargs.get("created_date", datetime.datetime(2019, 2, 24))
+    data["modified_date"] = kwargs.get("modified_date", datetime.datetime(2019, 2, 24))
 
     task_record = Task(**data)
 
@@ -101,8 +102,8 @@ def a_task(session, **kwargs):
 
 
 def a_tag(session, **kwargs):
-    data = kwargs
-    data["name"] = data.get("name", "test")
+    data = dict()
+    data["name"] = kwargs.get("name", "test")
 
     tag_record = Tag(**data)
 
@@ -111,9 +112,9 @@ def a_tag(session, **kwargs):
 
 
 def an_action(session, **kwargs):
-    data = kwargs
-    data["action_date"] = data.get("action_date", datetime.datetime(2019, 2, 24))
-    data["points"] = data.get("points", 1)
+    data = dict()
+    data["action_date"] = kwargs.get("action_date", datetime.datetime(2019, 2, 24))
+    data["points"] = kwargs.get("points", 1)
 
     action_record = Action(**data)
 

@@ -1,12 +1,8 @@
-import datetime
 import json
 
 import pytest
 from app.model import (
     Reoccur as ReoccurRecord,
-    Category as CategoryRecord,
-    Tag as TagRecord,
-    Action as ActionRecord
 )
 from app.todo.domains.todo_type import TodoType
 from app.utils import make
@@ -14,25 +10,25 @@ from app.utils import make
 
 @pytest.mark.integration
 def test_reoccur_create(client, session, test_user):
+    category = make.a_category(session)
     todo_data = {
         "name": "reoccur_test",
         "description": "description",
+        "todoType": "REOCCUR",
         "completionPoints": 1,
         "repeat": {
             "repeatType": "DAY_OF_WEEK",
             "when": ["Sunday"]
         },
         "category": {
-            "id": "abc"
+            "id": category.id
         },
         "tags": ["who", "knows"],
         "required": False
     }
 
-    make.a_category(session)
-
     data = json.dumps(todo_data)
-    create_resp = client.post('/reoccur',
+    create_resp = client.post('/todo',
                               data=data,
                               headers={'Authorization': test_user.get("token")})
     assert create_resp.status_code == 200
@@ -47,7 +43,7 @@ def test_reoccur_create(client, session, test_user):
     assert create_data["completionPoints"] == todo_data["completionPoints"]
     assert create_data["repeat"] == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
     assert create_data["required"] is False
-    assert create_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
+    assert create_data["category"] == {'id': category.id, "name": "test", "color": "#FFF"}
     assert sorted(create_data["tags"]) == sorted(["who", "knows"])
     assert create_data["actions"] == []
     assert create_data["createdDate"] is not None
@@ -64,7 +60,7 @@ def test_reoccur_create(client, session, test_user):
     assert reoccur_record.completion_points == todo_data["completionPoints"]
     assert reoccur_record.repeat == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
     assert reoccur_record.required == todo_data['required']
-    assert reoccur_record.category.id == "abc"
+    assert reoccur_record.category.id == category.id
     assert reoccur_record.category.name == "test"
     assert reoccur_record.category.color == "#FFF"
     assert len(reoccur_record.tags) == 2
@@ -77,25 +73,25 @@ def test_reoccur_create(client, session, test_user):
 
 @pytest.mark.integration
 def test_reoccur_create_unauthorized(client, session, test_user):
+    category = make.a_category(session)
     todo_data = {
         "name": "reoccur_test",
         "todoOwnerId": "123",
         "description": "description",
+        "todoType": "REOCCUR",
         "completionPoints": 1,
         "repeat": {
             "repeatType": "DAY_OF_WEEK",
             "when": ["Sunday"]
         },
         "category": {
-            "id": "abc",
-            "name": "test",
-            "color": "#FFF"
+            "id": category.id
         },
         "tags": ["who", "knows"],
         "required": False
     }
     data = json.dumps(todo_data)
-    create_resp = client.post('/reoccur',
+    create_resp = client.post('/todo',
                               data=data,
                               headers={'Authorization': test_user.get("token")})
     assert create_resp.status_code == 401
@@ -103,28 +99,26 @@ def test_reoccur_create_unauthorized(client, session, test_user):
 
 @pytest.mark.integration
 def test_reoccur_create_admin(client, session, test_admin):
+    category = make.a_category(session)
     todo_data = {
         "name": "reoccur_test",
         "todoOwnerId": "123",
         "description": "description",
+        "todoType": "REOCCUR",
         "completionPoints": 1,
         "repeat": {
             "repeatType": "DAY_OF_WEEK",
             "when": ["Sunday"]
         },
         "category": {
-            "id": "abc",
-            "name": "test",
-            "color": "#FFF"
+            "id": category.id
         },
         "tags": ["who", "knows"],
         "required": False
     }
 
-    make.a_category(session)
-
     data = json.dumps(todo_data)
-    create_resp = client.post('/reoccur',
+    create_resp = client.post('/todo',
                               data=data,
                               headers={'Authorization': test_admin.get("token")})
     assert create_resp.status_code == 200
@@ -139,7 +133,7 @@ def test_reoccur_create_admin(client, session, test_admin):
     assert create_data["completionPoints"] == todo_data["completionPoints"]
     assert create_data["repeat"] == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
     assert create_data["required"] is False
-    assert create_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
+    assert create_data["category"] == {'id': category.id, "name": "test", "color": "#FFF"}
     assert sorted(create_data["tags"]) == sorted(["who", "knows"])
     assert create_data["actions"] == []
     assert create_data["createdDate"] is not None
@@ -156,7 +150,7 @@ def test_reoccur_create_admin(client, session, test_admin):
     assert reoccur_record.completion_points == todo_data["completionPoints"]
     assert reoccur_record.repeat == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
     assert reoccur_record.required == todo_data['required']
-    assert reoccur_record.category.id == "abc"
+    assert reoccur_record.category.id == category.id
     assert reoccur_record.category.name == "test"
     assert reoccur_record.category.color == "#FFF"
     assert len(reoccur_record.tags) == 2
@@ -177,7 +171,7 @@ def test_reoccur_read(client, session, test_user):
         actions=[make.an_action(session)]
     )
 
-    fetch_resp = client.get('/reoccur/%s' % reoccur_record.todo_id,
+    fetch_resp = client.get('/todo/%s' % reoccur_record.todo_id,
                             headers={'Authorization': test_user.get("token")})
     assert fetch_resp.status_code == 200
 
@@ -192,7 +186,7 @@ def test_reoccur_read(client, session, test_user):
     assert fetch_data["completionPoints"] == reoccur_record.completion_points
     assert fetch_data["required"] == reoccur_record.required
     assert fetch_data["repeat"] == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
-    assert fetch_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
+    assert fetch_data["category"] == {'id': reoccur_record.category_id, "name": "test", "color": "#FFF"}
     assert sorted(fetch_data["tags"]) == sorted(["who", "knows"])
     assert fetch_data["actions"] == [{'actionDate': 'Sun, 24 Feb 2019 00:00:00 GMT', 'points': 1}]
     assert fetch_data["createdDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"
@@ -208,7 +202,7 @@ def test_reoccur_read_unauthorized(client, session, test_user):
               make.a_tag(session, name="who")]
     )
 
-    fetch_resp = client.get('/reoccur/%s' % reoccur_record.todo_id,
+    fetch_resp = client.get('/todo/%s' % reoccur_record.todo_id,
                             headers={'Authorization': test_user.get("token")})
     assert fetch_resp.status_code == 401
 
@@ -223,7 +217,7 @@ def test_reoccur_read_admin(client, session, test_admin):
         actions=[make.an_action(session)]
     )
 
-    fetch_resp = client.get('/reoccur/%s' % reoccur_record.todo_id,
+    fetch_resp = client.get('/todo/%s' % reoccur_record.todo_id,
                             headers={'Authorization': test_admin.get("token")})
     assert fetch_resp.status_code == 200
 
@@ -238,7 +232,7 @@ def test_reoccur_read_admin(client, session, test_admin):
     assert fetch_data["completionPoints"] == reoccur_record.completion_points
     assert fetch_data["required"] == reoccur_record.required
     assert fetch_data["repeat"] == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
-    assert fetch_data["category"] == {'id': "abc", "name": "test", "color": "#FFF"}
+    assert fetch_data["category"] == {'id': reoccur_record.category_id, "name": "test", "color": "#FFF"}
     assert sorted(fetch_data["tags"]) == sorted(["who", "knows"])
     assert fetch_data["actions"] == [{'actionDate': 'Sun, 24 Feb 2019 00:00:00 GMT', "points": 1}]
     assert fetch_data["createdDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"
@@ -247,7 +241,7 @@ def test_reoccur_read_admin(client, session, test_admin):
 
 @pytest.mark.integration
 def test_reoccur_read_not_found(client, session, test_user):
-    fetch_resp = client.get('/reoccur/%s' % "abc",
+    fetch_resp = client.get('/todo/%s' % "abc",
                             headers={'Authorization': test_user.get("token")})
 
     assert fetch_resp.status_code == 404

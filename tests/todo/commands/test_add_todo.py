@@ -17,6 +17,7 @@ class TestAddTodoHabit:
             "name": "habit",
             "todoOwnerId": user_request.user_id,
             "description": "description",
+            "todoType": "HABIT",
             "pointsPer": 1,
             "completionPoints": 1,
             "frequency": 1,
@@ -35,8 +36,7 @@ class TestAddTodoHabit:
             },
             "tags": ["who", "knows"]
         }
-        todo_type = TodoType.HABIT
-        todo = AddTodo().execute(todo_data, todo_type)
+        todo = AddTodo().execute(todo_data)
 
         assert todo.todo_id is not None
         assert todo.name == "habit"
@@ -62,6 +62,7 @@ class TestAddTodoHabit:
             "name": "habit",
             "todo_owner_id": "456",
             "description": "description",
+            "todoType": "HABIT",
             "pointsPer": 1,
             "completionPoints": 1,
             "frequency": 1,
@@ -81,9 +82,8 @@ class TestAddTodoHabit:
             "tags": ["who", "knows"]
         }
 
-        todo_type = TodoType.HABIT
         with pytest.raises(UnauthorizedError):
-            AddTodo().execute(todo_data, todo_type)
+            AddTodo().execute(todo_data)
 
 
 class TestAddTodoReoccur:
@@ -93,6 +93,7 @@ class TestAddTodoReoccur:
             "name": "reoccur",
             "todoOwnerId": user_request.user_id,
             "description": "description",
+            "todoType": "REOCCUR",
             "completionPoints": 1,
             "required": False,
             "repeat": {
@@ -106,8 +107,7 @@ class TestAddTodoReoccur:
             },
             "tags": ["who", "knows"]
         }
-        todo_type = TodoType.REOCCUR
-        todo = AddTodo().execute(todo_data, todo_type)
+        todo = AddTodo().execute(todo_data)
 
         assert todo.todo_id is not None
         assert todo.name == "reoccur"
@@ -130,6 +130,7 @@ class TestAddTodoReoccur:
             "name": "reoccur",
             "todoOwnerId": "456",
             "description": "description",
+            "todoType": "REOCCUR",
             "completionPoints": 1,
             "required": False,
             "repeat": {
@@ -144,9 +145,8 @@ class TestAddTodoReoccur:
             "tags": ["who", "knows"]
         }
 
-        todo_type = TodoType.REOCCUR
         with pytest.raises(UnauthorizedError):
-            AddTodo().execute(todo_data, todo_type)
+            AddTodo().execute(todo_data)
 
 
 class TestAddTodoTask:
@@ -156,6 +156,7 @@ class TestAddTodoTask:
             "name": "task",
             "todoOwnerId": user_request.user_id,
             "description": "description",
+            "todoType": "TASK",
             "completionPoints": 1,
             "dueDate": "2019-03-03 00:20:05",
             "category": {
@@ -165,8 +166,7 @@ class TestAddTodoTask:
             },
             "tags": ["who", "knows"]
         }
-        todo_type = TodoType.TASK
-        todo = AddTodo().execute(todo_data, todo_type)
+        todo = AddTodo().execute(todo_data)
 
         assert todo.todo_id is not None
         assert todo.name == "task"
@@ -187,6 +187,7 @@ class TestAddTodoTask:
             "name": "task",
             "todoOwnerId": "456",
             "description": "description",
+            "todoType": "TASK",
             "completionPoints": 1,
             "dueDate": "2019-03-03 00:20:05",
             "category": {
@@ -197,6 +198,5 @@ class TestAddTodoTask:
             "tags": ["who", "knows"]
         }
 
-        todo_type = TodoType.REOCCUR
         with pytest.raises(UnauthorizedError):
-            AddTodo().execute(todo_data, todo_type)
+            AddTodo().execute(todo_data)

@@ -1,11 +1,13 @@
+import json
 import logging
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 
 from app.auth import get_request
 from app.auth.auth_decorator import authorized
 from app.auth.auth_util import is_admin
 from app.errors import UnauthorizedError
+from app.todo.commands.add_todo import AddTodo
 from app.todo.commands.get_todo import GetTodo
 from app.todo.commands.get_todos import GetAllTodos
 
@@ -18,6 +20,18 @@ logger = logging.getLogger(__name__)
 @authorized
 def read(todo_id):
     todo = GetTodo().execute(todo_id)
+    return jsonify(todo.to_dict())
+
+
+@todo_controller.route('/todo', methods=['POST'])
+@authorized
+def create():
+    todo_data = json.loads(request.data)
+
+    if not todo_data.get("todoOwnerId"):
+        todo_data["todoOwnerId"] = request.user_id
+
+    todo = AddTodo().execute(todo_data)
     return jsonify(todo.to_dict())
 
 
