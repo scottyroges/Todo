@@ -44,7 +44,9 @@ class TestPerformActionHabit:
         assert create_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
         assert create_data["category"] == {'id': habit_record.category_id, "name": "test", "color": "#FFF"}
         assert sorted(create_data["tags"]) == sorted(["who", "knows"])
-        assert create_data["actions"] == [{'actionDate': 'Thu, 21 Feb 2019 12:02:05 GMT', 'points': 1}]
+        assert create_data["actions"][0]["actionId"] is not None
+        assert create_data["actions"][0]["actionDate"] == 'Thu, 21 Feb 2019 12:02:05 GMT'
+        assert create_data["actions"][0]["points"] == 1
         assert create_data["createdDate"] is not None
         assert create_data["modifiedDate"] is not None
 
@@ -111,7 +113,9 @@ class TestPerformActionHabit:
         assert create_data["buffer"] == {'amount': 1, 'bufferType': 'DAY_START'}
         assert create_data["category"] == {'id': habit_record.category_id, "name": "test", "color": "#FFF"}
         assert sorted(create_data["tags"]) == sorted(["who", "knows"])
-        assert create_data["actions"] == [{'actionDate': 'Thu, 21 Feb 2019 12:02:05 GMT', 'points': 1}]
+        assert create_data["actions"][0]["actionId"] is not None
+        assert create_data["actions"][0]["actionDate"] == 'Thu, 21 Feb 2019 12:02:05 GMT'
+        assert create_data["actions"][0]["points"] == 1
         assert create_data["createdDate"] is not None
         assert create_data["modifiedDate"] is not None
 
@@ -159,7 +163,9 @@ class TestPerformActionReoccur:
         assert create_data["required"] is False
         assert create_data["category"] == {'id': reoccur_record.category_id, "name": "test", "color": "#FFF"}
         assert sorted(create_data["tags"]) == sorted(["who", "knows"])
-        assert create_data["actions"] == [{'actionDate': 'Thu, 21 Feb 2019 12:02:05 GMT', 'points': 1}]
+        assert create_data["actions"][0]["actionId"] is not None
+        assert create_data["actions"][0]["actionDate"] == 'Thu, 21 Feb 2019 12:02:05 GMT'
+        assert create_data["actions"][0]["points"] == 1
         assert create_data["createdDate"] is not None
         assert create_data["modifiedDate"] is not None
 
@@ -224,7 +230,9 @@ class TestPerformActionReoccur:
         assert create_data["repeat"] == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
         assert create_data["category"] == {'id': reoccur_record.category_id, "name": "test", "color": "#FFF"}
         assert sorted(create_data["tags"]) == sorted(["who", "knows"])
-        assert create_data["actions"] == [{'actionDate': 'Thu, 21 Feb 2019 12:02:05 GMT', 'points': 1}]
+        assert create_data["actions"][0]["actionId"] is not None
+        assert create_data["actions"][0]["actionDate"] == 'Thu, 21 Feb 2019 12:02:05 GMT'
+        assert create_data["actions"][0]["points"] == 1
         assert create_data["createdDate"] is not None
         assert create_data["modifiedDate"] is not None
 

@@ -13,7 +13,7 @@ from app.todo.domains.todo_owner import TodoOwner
 def test_to_dict():
     todo_owner = TodoOwner(owner_id="123")
     tags = [Tag(name="who"), Tag(name="knows")]
-    actions = [Action(points=2)]
+    actions = [Action(action_id="fgh", points=2)]
     task = Task(todo_id="abc",
                 todo_owner=todo_owner,
                 name="task",
@@ -43,6 +43,7 @@ def test_to_dict():
         "createdDate": datetime.datetime(2019, 2, 24, 10, 0, 4),
         "modifiedDate": datetime.datetime(2019, 2, 24, 10, 0, 4),
         "actions": [{
+            "actionId": "fgh",
             "actionDate": datetime.datetime(2019, 2, 24, 10, 0, 4),
             "points": 2
         }],

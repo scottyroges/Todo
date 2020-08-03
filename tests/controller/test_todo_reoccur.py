@@ -188,7 +188,9 @@ class TestReoccurRead:
         assert fetch_data["repeat"] == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
         assert fetch_data["category"] == {'id': reoccur_record.category_id, "name": "test", "color": "#FFF"}
         assert sorted(fetch_data["tags"]) == sorted(["who", "knows"])
-        assert fetch_data["actions"] == [{'actionDate': 'Sun, 24 Feb 2019 00:00:00 GMT', 'points': 1}]
+        assert fetch_data["actions"][0]["actionId"] is not None
+        assert fetch_data["actions"][0]["actionDate"] == 'Sun, 24 Feb 2019 00:00:00 GMT'
+        assert fetch_data["actions"][0]["points"] == 1
         assert fetch_data["createdDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"
         assert fetch_data["modifiedDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"
 
@@ -232,7 +234,9 @@ class TestReoccurRead:
         assert fetch_data["repeat"] == {'when': ["Sunday"], 'repeatType': 'DAY_OF_WEEK'}
         assert fetch_data["category"] == {'id': reoccur_record.category_id, "name": "test", "color": "#FFF"}
         assert sorted(fetch_data["tags"]) == sorted(["who", "knows"])
-        assert fetch_data["actions"] == [{'actionDate': 'Sun, 24 Feb 2019 00:00:00 GMT', "points": 1}]
+        assert fetch_data["actions"][0]["actionId"] is not None
+        assert fetch_data["actions"][0]["actionDate"] == 'Sun, 24 Feb 2019 00:00:00 GMT'
+        assert fetch_data["actions"][0]["points"] == 1
         assert fetch_data["createdDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"
         assert fetch_data["modifiedDate"] == "Sun, 24 Feb 2019 00:00:00 GMT"
 

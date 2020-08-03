@@ -12,6 +12,7 @@ class Action:
 
     def to_dict(self):
         return {
+            "actionId": self.action_id,
             "actionDate": self.action_date,
             "points": self.points
         }

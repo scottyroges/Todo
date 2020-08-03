@@ -13,6 +13,7 @@ def test_to_dict():
     )
 
     assert action.to_dict() == {
+        "actionId": "abc",
         "actionDate": datetime.datetime(2019, 2, 24),
         "points": 4
     }

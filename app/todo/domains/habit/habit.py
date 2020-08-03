@@ -42,6 +42,7 @@ class Habit(Todo):
     def to_dict(self):
         todo_dict = super().to_dict()
         todo_dict.update({
+            "actionsWithinPeriod": [],
             "pointsPer": self.points_per,
             "frequency": self.frequency,
             "period": {

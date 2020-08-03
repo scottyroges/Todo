@@ -19,7 +19,7 @@ def test_to_dict():
     buffer = HabitBuffer(buffer_type=HabitBufferType.DAY_START,
                          amount=1)
     tags = [Tag(name="who"), Tag(name="knows")]
-    actions = [Action(points=2)]
+    actions = [Action(action_id="fgh", points=2)]
     habit = Habit(todo_id="abc",
                   todo_owner=todo_owner,
                   name="habit",
@@ -61,9 +61,11 @@ def test_to_dict():
         "createdDate": datetime.datetime(2019, 2, 24, 10, 0, 4),
         "modifiedDate": datetime.datetime(2019, 2, 24, 10, 0, 4),
         "actions": [{
+            "actionId": "fgh",
             "actionDate": datetime.datetime(2019, 2, 24, 10, 0, 4),
             "points": 2
         }],
+        "actionsWithinPeriod": [],
         "shouldShow": False
     }
 
