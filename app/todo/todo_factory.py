@@ -26,9 +26,8 @@ class TodoFactory:
         else:
             print("wtf")
 
-        # categories_data = todo_data.get("categories", [])
-        # for category_name in categories_data:
-        #     todo.add_category(Category(name=category_name))
+        if todo_data.get("todoId"):
+            todo.todo_id = todo_data.get("todoId")
 
         category_data = todo_data.get("category")
         todo.category = Category(

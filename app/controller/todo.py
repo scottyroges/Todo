@@ -10,6 +10,7 @@ from app.errors import UnauthorizedError
 from app.todo.commands.add_todo import AddTodo
 from app.todo.commands.get_todo import GetTodo
 from app.todo.commands.get_todos import GetAllTodos
+from app.todo.commands.update_todo import UpdateTodo
 
 todo_controller = Blueprint('todo', __name__)
 
@@ -32,6 +33,15 @@ def create():
         todo_data["todoOwnerId"] = request.user_id
 
     todo = AddTodo().execute(todo_data)
+    return jsonify(todo.to_dict())
+
+
+@todo_controller.route('/todo', methods=['PUT'])
+@authorized
+def update():
+    todo_data = json.loads(request.data)
+
+    todo = UpdateTodo().execute(todo_data)
     return jsonify(todo.to_dict())
 
 

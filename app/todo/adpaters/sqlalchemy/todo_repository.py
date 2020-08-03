@@ -4,6 +4,7 @@ from app.todo.domains.todo_type import TodoType
 from app.todo.transformers.habit_transformer import HabitTransformer
 from app.todo.transformers.reoccur_transformer import ReoccurTransformer
 from app.todo.transformers.task_transformer import TaskTransformer
+import logging
 
 
 class TodoRepository:
@@ -18,9 +19,15 @@ class TodoRepository:
 
         return self._get_transformer(todo.todo_type).from_record(todo_record)
 
+    def _read(self, todo_id):
+        todo_record = (self._session.query(Todo).get(todo_id))
+        if todo_record is None:
+            return None
+        return todo_record
+
     def read(self, todo_id):
-        todo_record = (self._session.query(Todo)
-                       .get(todo_id))
+        todo_record = self._read(todo_id)
+
         if todo_record is None:
             return None
 
@@ -33,6 +40,12 @@ class TodoRepository:
 
     def update(self, todo):
         todo_record = self._get_transformer(todo.todo_type).to_record(todo)
+
+        previous_todo_record = self._read(todo_record.todo_id)
+
+        if previous_todo_record.todo_type != todo_record.todo_type:
+            logging.info("trying to update todo type")
+            self._session.delete(previous_todo_record)
 
         todo_record = self._session.merge(todo_record)
         self._session.commit()
