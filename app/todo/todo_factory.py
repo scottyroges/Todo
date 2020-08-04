@@ -30,9 +30,10 @@ class TodoFactory:
             todo.todo_id = todo_data.get("todoId")
 
         category_data = todo_data.get("category")
-        todo.category = Category(
-            category_id=category_data.get("id")
-        )
+        if category_data is not None:
+            todo.category = Category(
+                category_id=category_data.get("id")
+            )
 
         tags_data = todo_data.get("tags", [])
         for tag_name in tags_data:
