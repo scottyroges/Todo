@@ -67,6 +67,28 @@ class TestTaskCreate:
         assert task_record.modified_date is not None
 
     @pytest.mark.integration
+    def test_task_create_no_category(self, client, session, test_user):
+        todo_data = {
+            "name": "task_test",
+            "description": "description",
+            "todoType": "TASK",
+            "completionPoints": 1,
+            "dueDate": "2019-03-02 22:48:05",
+            "tags": ["who", "knows"]
+        }
+
+        data = json.dumps(todo_data)
+        create_resp = client.post('/todo',
+                                  data=data,
+                                  headers={'Authorization': test_user.get("token")})
+        assert create_resp.status_code == 200
+
+        create_data = json.loads(create_resp.data.decode('utf-8'))
+        assert create_data is not None
+
+        assert create_data["category"] == {}
+
+    @pytest.mark.integration
     def test_task_create_unauthorized(self, client, session, test_user):
         category = make.a_category(session)
         todo_data = {

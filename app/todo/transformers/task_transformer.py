@@ -24,6 +24,8 @@ class TaskTransformer:
                                 points=action.points)
                    for action in task.actions]
 
+        category_id = task.category.category_id if task.category else None
+
         return TaskRecord(todo_id=task.todo_id,
                           todo_owner_id=task.todo_owner.owner_id,
                           name=task.name,
@@ -31,7 +33,7 @@ class TaskTransformer:
                           todo_type=task.todo_type,
                           completion_points=task.completion_points,
                           due_date=task.due_date,
-                          category_id=task.category.category_id,
+                          category_id=category_id,
                           tags=tags,
                           actions=actions,
                           created_date=task.created_date,
@@ -40,9 +42,12 @@ class TaskTransformer:
     @classmethod
     def from_record(cls, task_record: TaskRecord):
         todo_owner = TodoOwner(owner_id=task_record.todo_owner_id)
-        category = DomainCategory(category_id=task_record.category.id,
-                                  name=task_record.category.name,
-                                  color=task_record.category.color)
+
+        category = None
+        if task_record.category:
+            category = DomainCategory(category_id=task_record.category.id,
+                                      name=task_record.category.name,
+                                      color=task_record.category.color)
         tags = [DomainTag(tag_id=tag.id,
                           name=tag.name)
                 for tag in task_record.tags]

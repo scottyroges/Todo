@@ -29,6 +29,8 @@ class ReoccurTransformer:
                                 points=action.points)
                    for action in reoccur.actions]
 
+        category_id = reoccur.category.category_id if reoccur.category else None
+
         return ReoccurRecord(todo_id=reoccur.todo_id,
                              todo_owner_id=reoccur.todo_owner.owner_id,
                              name=reoccur.name,
@@ -37,7 +39,7 @@ class ReoccurTransformer:
                              completion_points=reoccur.completion_points,
                              repeat=repeat,
                              required=reoccur.required,
-                             category_id=reoccur.category.category_id,
+                             category_id=category_id,
                              tags=tags,
                              actions=actions,
                              created_date=reoccur.created_date,
@@ -48,10 +50,11 @@ class ReoccurTransformer:
         todo_owner = TodoOwner(owner_id=reoccur_record.todo_owner_id)
         repeat = ReoccurRepeat(repeat_type=ReoccurRepeatType[reoccur_record.repeat.get("repeatType")],
                                when=reoccur_record.repeat.get("when"))
-        
-        category = DomainCategory(category_id=reoccur_record.category.id,
-                                  name=reoccur_record.category.name,
-                                  color=reoccur_record.category.color)
+        category = None
+        if reoccur_record.category:
+            category = DomainCategory(category_id=reoccur_record.category.id,
+                                      name=reoccur_record.category.name,
+                                      color=reoccur_record.category.color)
 
         tags = [DomainTag(tag_id=tag.id,
                           name=tag.name)

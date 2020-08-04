@@ -183,4 +183,4 @@ class TestUpdateToDifferentType:
         assert update_resp.status_code == 200
         update_data = json.loads(update_resp.data.decode('utf-8'))
 
-        print(update_data)
+

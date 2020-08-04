@@ -35,6 +35,8 @@ class HabitTransformer:
                                 points=action.points)
                    for action in habit.actions]
 
+        category_id = habit.category.category_id if habit.category else None
+
         return HabitRecord(todo_id=habit.todo_id,
                            todo_owner_id=habit.todo_owner.owner_id,
                            name=habit.name,
@@ -45,7 +47,7 @@ class HabitTransformer:
                            frequency=habit.frequency,
                            period=period,
                            buffer=buffer,
-                           category_id=habit.category.category_id,
+                           category_id=category_id,
                            tags=tags,
                            actions=actions,
                            created_date=habit.created_date,
@@ -58,9 +60,11 @@ class HabitTransformer:
                              amount=habit_record.period.get("amount"))
         buffer = HabitBuffer(buffer_type=HabitBufferType[habit_record.buffer.get("bufferType")],
                              amount=habit_record.buffer.get("amount"))
-        category = DomainCategory(category_id=habit_record.category.id,
-                                  name=habit_record.category.name,
-                                  color=habit_record.category.color)
+        category = None
+        if habit_record.category:
+            category = DomainCategory(category_id=habit_record.category.id,
+                                      name=habit_record.category.name,
+                                      color=habit_record.category.color)
         tags = [DomainTag(tag_id=tag.id,
                           name=tag.name)
                 for tag in habit_record.tags]

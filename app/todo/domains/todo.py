@@ -49,7 +49,7 @@ class Todo:
             "description": self.description,
             "todoType": self.todo_type.name,
             "completionPoints": self.completion_points,
-            "category": self.category.to_dict(),
+            "category": self.category.to_dict() if self.category else {},
             "tags": [tag.name for tag in self.tags],
             "actions": [action.to_dict() for action in self.actions],
             "createdDate": self.created_date,

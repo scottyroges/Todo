@@ -84,6 +84,37 @@ class TestHabitCreate:
         assert habit_record.modified_date is not None
 
     @pytest.mark.integration
+    def test_habit_create_no_category(self, client, session, test_user):
+        todo_data = {
+            "name": "habit_test",
+            "description": "description",
+            "pointsPer": 1,
+            "completionPoints": 1,
+            "frequency": 1,
+            "todoType": "HABIT",
+            "buffer": {
+                "bufferType": "DAY_START",
+                "amount": 1
+            },
+            "period": {
+                "periodType": "WEEKS",
+                "amount": 1
+            },
+            "tags": ["who", "knows"]
+        }
+
+        data = json.dumps(todo_data)
+        create_resp = client.post('/todo',
+                                  data=data,
+                                  headers={'Authorization': test_user.get("token")})
+        assert create_resp.status_code == 200
+
+        create_data = json.loads(create_resp.data.decode('utf-8'))
+        assert create_data is not None
+
+        assert create_data["category"] == {}
+
+    @pytest.mark.integration
     def test_habit_create_unauthorized(self, client, session, test_user):
         todo_data = {
             "name": "habit_test",

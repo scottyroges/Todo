@@ -72,6 +72,32 @@ class TestReoccurCreate:
         assert reoccur_record.modified_date is not None
 
     @pytest.mark.integration
+    def test_reoccur_create_no_category(self, client, session, test_user):
+        todo_data = {
+            "name": "reoccur_test",
+            "description": "description",
+            "todoType": "REOCCUR",
+            "completionPoints": 1,
+            "repeat": {
+                "repeatType": "DAY_OF_WEEK",
+                "when": ["Sunday"]
+            },
+            "tags": ["who", "knows"],
+            "required": False
+        }
+
+        data = json.dumps(todo_data)
+        create_resp = client.post('/todo',
+                                  data=data,
+                                  headers={'Authorization': test_user.get("token")})
+        assert create_resp.status_code == 200
+
+        create_data = json.loads(create_resp.data.decode('utf-8'))
+        assert create_data is not None
+
+        assert create_data["category"] == {}
+
+    @pytest.mark.integration
     def test_reoccur_create_unauthorized(self, client, session, test_user):
         category = make.a_category(session)
         todo_data = {
