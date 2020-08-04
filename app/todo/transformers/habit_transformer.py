@@ -61,7 +61,6 @@ class HabitTransformer:
         category = DomainCategory(category_id=habit_record.category.id,
                                   name=habit_record.category.name,
                                   color=habit_record.category.color)
-
         tags = [DomainTag(tag_id=tag.id,
                           name=tag.name)
                 for tag in habit_record.tags]

@@ -39,6 +39,7 @@ class TodoRepository:
                 for todo_record in todo_records]
 
     def update(self, todo):
+        print("updating todo")
         todo_record = self._get_transformer(todo.todo_type).to_record(todo)
 
         previous_todo_record = self._read(todo_record.todo_id)
@@ -49,6 +50,8 @@ class TodoRepository:
 
         todo_record = self._session.merge(todo_record)
         self._session.commit()
+
+        self._session.expire(todo_record, ['category'])
         return self._get_transformer(todo.todo_type).from_record(todo_record)
 
     def _get_transformer(self, todo_type):

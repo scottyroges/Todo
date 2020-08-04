@@ -153,3 +153,34 @@ class TestUpdateToDifferentType:
         assert len(task_record.actions) == 0
         assert task_record.created_date is not None
         assert task_record.modified_date is not None
+
+    @pytest.mark.integration
+    def test_update_category(self, client, session, test_user):
+        habit_record = make.a_habit(session, todo_owner_id=test_user.get("user_id"))
+
+        fetch_resp = client.get('/todo/%s' % habit_record.todo_id,
+                                headers={'Authorization': test_user.get("token")})
+        assert fetch_resp.status_code == 200
+
+        fetch_data = json.loads(fetch_resp.data.decode('utf-8'))
+
+        new_category = make.a_category(session=session,
+                                       user_id=test_user.get("user_id"),
+                                       name="Another Category",
+                                       color="#b1b1b1")
+
+        fetch_data["category"] = {
+            "id": new_category.id,
+            "name": new_category.name,
+            "color": new_category.color
+        }
+
+        data = json.dumps(fetch_data)
+        update_resp = client.put('/todo',
+                                 data=data,
+                                 headers={'Authorization': test_user.get("token")})
+
+        assert update_resp.status_code == 200
+        update_data = json.loads(update_resp.data.decode('utf-8'))
+
+        print(update_data)
