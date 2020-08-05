@@ -1,4 +1,4 @@
-import datetime
+import arrow
 
 from app.todo.domains.category import Category
 from app.todo.domains.habit.habit import Habit
@@ -78,9 +78,8 @@ class TodoFactory:
     def create_task(cls, todo_owner, task_data):
         due_date = None
         if task_data.get("dueDate"):
-            due_date = datetime.datetime.strptime(
-                task_data.get("dueDate"),
-                '%Y-%m-%d %H:%M:%S')
+            due_date = arrow.get(
+                task_data.get("dueDate")).datetime
         task = Task(todo_owner=todo_owner,
                     name=task_data.get('name'),
                     description=task_data.get('description'),

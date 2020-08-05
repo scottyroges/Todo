@@ -1,6 +1,7 @@
 import datetime
 
 import pytest
+from dateutil.tz import tzutc
 
 from app.errors import UnauthorizedError
 from app.todo.commands.update_todo import UpdateTodo
@@ -42,7 +43,7 @@ class TestUpdateTodo:
         assert updated_todo.name == todo_data["name"]
         assert updated_todo.todo_type == TodoType.TASK
         assert updated_todo.completion_points == todo_data["completionPoints"]
-        assert updated_todo.due_date == datetime.datetime(2019, 5, 2, 22, 48, 5)
+        assert updated_todo.due_date == datetime.datetime(2019, 5, 2, 22, 48, 5, tzinfo=tzutc())
         assert updated_todo.category.category_id == new_category.id
 
     def test_update_todo_unauthorized(self, user_request, todo_repo):

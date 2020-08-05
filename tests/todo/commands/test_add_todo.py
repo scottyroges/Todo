@@ -1,5 +1,6 @@
 import datetime
 import pytest
+from dateutil.tz import tzutc
 from freezegun import freeze_time
 
 from app.errors import UnauthorizedError
@@ -174,7 +175,7 @@ class TestAddTodoTask:
         assert todo.description == "description"
         assert todo.todo_type == TodoType.TASK
         assert todo.completion_points == 1
-        assert todo.due_date == datetime.datetime(2019, 3, 3, 0, 20, 5)
+        assert todo.due_date == datetime.datetime(2019, 3, 3, 0, 20, 5, tzinfo=tzutc())
         assert todo.category.category_id == "abc"
         for tag in todo.tags:
             assert tag.name in ["who", "knows"]
